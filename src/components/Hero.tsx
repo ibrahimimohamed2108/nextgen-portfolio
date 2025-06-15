@@ -4,15 +4,29 @@ import { Download, Mail, Github, Linkedin, ChevronDown } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ParticleBackground } from "@/components/ParticleBackground";
+import { useToast } from "@/hooks/use-toast";
 
 const Hero = () => {
   const { ref, isInView } = useInView({ threshold: 0.3 });
   const { t, language } = useLanguage();
+  const { toast } = useToast();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+      toast({
+        title: "Navigating",
+        description: `Scrolling to ${sectionId} section`,
+      });
+      console.log(`Scrolling to section: ${sectionId}`);
+    } else {
+      console.error(`Section with id '${sectionId}' not found`);
+      toast({
+        title: "Navigation Error",
+        description: "Section not found",
+        variant: "destructive"
+      });
     }
   };
 
@@ -127,9 +141,19 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
       document.body.removeChild(link);
       
       URL.revokeObjectURL(url);
+      
+      toast({
+        title: "CV Downloaded",
+        description: "Your CV has been downloaded successfully",
+      });
       console.log('CV downloaded successfully');
     } catch (error) {
       console.error('Error downloading CV:', error);
+      toast({
+        title: "Download Failed",
+        description: "Unable to download CV. Opening email instead.",
+        variant: "destructive"
+      });
       // Fallback: open mailto with CV content
       window.open(`mailto:?subject=Mohamed IBRAHIMI - CV&body=${encodeURIComponent(cvContent.substring(0, 1000) + '...')}`);
     }
@@ -138,29 +162,61 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
   const openGitHub = () => {
     try {
       window.open('https://github.com/ibrahimimohamed2108', '_blank', 'noopener,noreferrer');
+      toast({
+        title: "Opening GitHub",
+        description: "Redirecting to GitHub profile",
+      });
       console.log('Opening GitHub profile');
     } catch (error) {
       console.error('Error opening GitHub:', error);
+      toast({
+        title: "Error",
+        description: "Unable to open GitHub",
+        variant: "destructive"
+      });
     }
   };
 
   const openLinkedIn = () => {
     try {
       window.open('https://www.linkedin.com/in/ibrahimimohamed', '_blank', 'noopener,noreferrer');
+      toast({
+        title: "Opening LinkedIn",
+        description: "Redirecting to LinkedIn profile",
+      });
       console.log('Opening LinkedIn profile');
     } catch (error) {
       console.error('Error opening LinkedIn:', error);
+      toast({
+        title: "Error",
+        description: "Unable to open LinkedIn",
+        variant: "destructive"
+      });
     }
   };
 
   const openEmail = () => {
     try {
       window.location.href = 'mailto:ibrahimimoahamed2108@gmail.com';
+      toast({
+        title: "Opening Email",
+        description: "Launching email client",
+      });
       console.log('Opening email client');
     } catch (error) {
       console.error('Error opening email:', error);
+      toast({
+        title: "Email Error",
+        description: "Unable to open email client",
+        variant: "destructive"
+      });
       // Fallback: copy email to clipboard
-      navigator.clipboard?.writeText('ibrahimimoahamed2108@gmail.com');
+      navigator.clipboard?.writeText('ibrahimimoahamed2108@gmail.com').then(() => {
+        toast({
+          title: "Email Copied",
+          description: "Email address copied to clipboard",
+        });
+      });
     }
   };
 
