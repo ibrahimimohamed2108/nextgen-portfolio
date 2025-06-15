@@ -1,4 +1,5 @@
 
+
 import { useEffect, useRef, useState } from 'react';
 import { 
   Engine, 
@@ -86,7 +87,7 @@ export const BabylonScene: React.FC<BabylonSceneProps> = ({
         // Create camera
         const camera = new FreeCamera('camera', new Vector3(0, 0, 12), scene);
         camera.setTarget(Vector3.Zero());
-        camera.attachControls(canvasRef.current, true);
+        camera.attachControl(canvasRef.current, true);
         cameraRef.current = camera;
 
         // Enhanced lighting setup
@@ -264,3 +265,4 @@ export const BabylonScene: React.FC<BabylonSceneProps> = ({
     />
   );
 };
+
