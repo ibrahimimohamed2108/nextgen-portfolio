@@ -13,62 +13,43 @@ const Gallery3D = () => {
   const cubeRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
-  const orbitAnimationRef = useRef<any>(null);
 
   const galleryItems = [
     {
       title: "AWS DevOps",
       description: "Cloud Infrastructure & CI/CD",
-      content: "Deployed scalable applications using EC2, S3, and Lambda. Implemented automated CI/CD pipelines with Jenkins and Docker for seamless deployments.",
       icon: "☁️",
-      color: "from-orange-500 to-yellow-500",
-      orbitRadius: 120,
-      orbitSpeed: 30
+      color: "from-orange-500 to-yellow-500"
     },
     {
       title: "React Development",
       description: "Modern Frontend Applications",
-      content: "Built responsive web applications using React, TypeScript, and modern state management. Expertise in component architecture and performance optimization.",
       icon: "⚛️",
-      color: "from-blue-500 to-cyan-500",
-      orbitRadius: 160,
-      orbitSpeed: 25
+      color: "from-blue-500 to-cyan-500"
     },
     {
       title: "Database Systems",
       description: "MySQL & Data Management",
-      content: "Designed and optimized database schemas, implemented complex queries, and managed data integrity across multiple applications and systems.",
       icon: "🗄️",
-      color: "from-green-500 to-emerald-500",
-      orbitRadius: 200,
-      orbitSpeed: 20
+      color: "from-green-500 to-emerald-500"
     },
     {
       title: "Spring Boot",
       description: "Backend API Development",
-      content: "Developed RESTful APIs and microservices using Spring Boot. Implemented security, authentication, and integrated with various databases and external services.",
       icon: "🍃",
-      color: "from-green-600 to-lime-500",
-      orbitRadius: 140,
-      orbitSpeed: 35
+      color: "from-green-600 to-lime-500"
     },
     {
       title: "Docker & K8s",
       description: "Containerization & Orchestration",
-      content: "Containerized applications with Docker and orchestrated them using Kubernetes. Managed scaling, load balancing, and service discovery in production environments.",
       icon: "🐳",
-      color: "from-blue-600 to-indigo-500",
-      orbitRadius: 180,
-      orbitSpeed: 28
+      color: "from-blue-600 to-indigo-500"
     },
     {
       title: "TypeScript",
       description: "Type-Safe Development",
-      content: "Leveraged TypeScript for building robust, maintainable codebases. Implemented advanced type systems and integrated with modern development workflows.",
       icon: "📘",
-      color: "from-blue-700 to-purple-500",
-      orbitRadius: 220,
-      orbitSpeed: 18
+      color: "from-blue-700 to-purple-500"
     }
   ];
 
@@ -88,9 +69,6 @@ const Gallery3D = () => {
       if (animationRef.current) {
         animationRef.current.pause();
       }
-      if (orbitAnimationRef.current) {
-        orbitAnimationRef.current.pause();
-      }
       document.head.removeChild(script);
     };
   }, []);
@@ -108,61 +86,26 @@ const Gallery3D = () => {
     window.anime({
       targets: cubeRefs.current.filter(Boolean),
       scale: [0, 1],
-      rotateY: [-180, 0],
-      rotateX: [90, 0],
-      translateZ: [200, 0],
+      rotateY: [-90, 0],
+      rotateX: [45, 0],
+      translateZ: [100, 0],
       opacity: [0, 1],
-      delay: window.anime.stagger(300),
-      duration: 1500,
-      easing: 'easeOutElastic(1, .6)'
+      delay: window.anime.stagger(200),
+      duration: 1000,
+      easing: 'easeOutExpo'
     });
 
-    // Continuous orbital motion
-    cubeRefs.current.forEach((cube, index) => {
-      if (!cube) return;
-      const item = galleryItems[index];
-      
-      // Set initial orbital position
-      const angle = (index / galleryItems.length) * 360;
-      const x = Math.cos(angle * Math.PI / 180) * item.orbitRadius;
-      const z = Math.sin(angle * Math.PI / 180) * item.orbitRadius;
-      
-      cube.style.transform = `translate3d(${x}px, 0, ${z}px)`;
-    });
-
-    // Orbital animation
-    orbitAnimationRef.current = window.anime({
-      targets: cubeRefs.current.filter(Boolean),
-      rotateY: 360,
-      duration: (el: HTMLElement, i: number) => galleryItems[i].orbitSpeed * 1000,
-      loop: true,
-      easing: 'linear',
-      update: (anim: any) => {
-        cubeRefs.current.forEach((cube, index) => {
-          if (!cube) return;
-          const item = galleryItems[index];
-          const progress = anim.progress / 100;
-          const angle = (index / galleryItems.length) * 360 + (progress * 360);
-          const x = Math.cos(angle * Math.PI / 180) * item.orbitRadius;
-          const z = Math.sin(angle * Math.PI / 180) * item.orbitRadius;
-          const y = Math.sin(progress * Math.PI * 4) * 20; // Vertical bobbing
-          
-          cube.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateY(${angle}deg) rotateX(${Math.sin(progress * Math.PI * 2) * 15}deg)`;
-        });
-      }
-    });
-
-    // Individual rotation animation
+    // Continuous floating animation
     animationRef.current = window.anime({
       targets: cubeRefs.current.filter(Boolean),
+      rotateY: '+=360',
       rotateX: [-5, 5, -5],
-      rotateZ: [-2, 2, -2],
-      scale: [1, 1.05, 1],
+      translateY: [-10, 10, -10],
       duration: 4000,
       loop: true,
       direction: 'alternate',
       easing: 'easeInOutSine',
-      delay: window.anime.stagger(500)
+      delay: window.anime.stagger(300)
     });
   };
 
@@ -171,10 +114,12 @@ const Gallery3D = () => {
 
     window.anime({
       targets: cubeRefs.current[index],
-      scale: isHover ? 1.3 : 1,
-      translateY: isHover ? -30 : 0,
-      duration: 400,
-      easing: 'easeOutQuart'
+      scale: isHover ? 1.1 : 1,
+      rotateX: isHover ? 15 : 0,
+      rotateY: isHover ? 15 : 0,
+      translateZ: isHover ? 30 : 0,
+      duration: 300,
+      easing: 'easeOutQuad'
     });
   };
 
@@ -186,57 +131,34 @@ const Gallery3D = () => {
     >
       {/* Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-blue-600 to-primary bg-clip-text text-transparent">
-            Gallery
+            Interactive 3D Gallery
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Dive into my professional journey through these interactive showcases. 
-            Each piece represents real projects and achievements that define my expertise in modern software development.
+            Explore my technical expertise through this interactive 3D showcase. 
+            Each cube represents a key area of my development skills.
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-blue-600 mx-auto rounded-full"></div>
         </div>
 
-        {/* 3D Solar System Container */}
+        {/* 3D Gallery Container */}
         <div 
           ref={containerRef}
-          className="relative min-h-[600px] flex items-center justify-center"
+          className="relative"
           style={{
-            perspective: '1200px',
+            perspective: '1000px',
             perspectiveOrigin: 'center center'
           }}
         >
-          {/* Central Core */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full animate-pulse shadow-2xl shadow-yellow-500/30"></div>
-          </div>
-
-          {/* Orbital Paths */}
-          {galleryItems.map((item, index) => (
-            <div
-              key={`orbit-${index}`}
-              className="absolute inset-0 flex items-center justify-center opacity-20"
-            >
-              <div 
-                className="border border-primary/20 rounded-full"
-                style={{
-                  width: item.orbitRadius * 2,
-                  height: item.orbitRadius * 2,
-                }}
-              ></div>
-            </div>
-          ))}
-
-          {/* Orbiting Elements */}
           <div 
-            className="absolute inset-0 flex items-center justify-center"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12"
             style={{
               transformStyle: 'preserve-3d'
             }}
@@ -245,52 +167,93 @@ const Gallery3D = () => {
               <div
                 key={index}
                 ref={el => cubeRefs.current[index] = el}
-                className="absolute group cursor-pointer"
+                className="relative group cursor-pointer"
                 style={{
                   transformStyle: 'preserve-3d',
+                  transform: 'translateZ(0)'
                 }}
                 onMouseEnter={() => handleCubeHover(index, true)}
                 onMouseLeave={() => handleCubeHover(index, false)}
               >
-                {/* 3D Card */}
+                {/* 3D Cube Container */}
                 <div 
-                  className="relative w-48 h-48"
+                  className="relative w-64 h-64 mx-auto"
                   style={{
                     transformStyle: 'preserve-3d'
                   }}
                 >
                   {/* Front Face */}
                   <div 
-                    className={`absolute inset-0 bg-gradient-to-br ${item.color} rounded-2xl shadow-2xl flex flex-col items-center justify-center text-white p-4 border border-white/20 backdrop-blur-sm`}
+                    className={`absolute inset-0 bg-gradient-to-br ${item.color} rounded-2xl shadow-2xl flex flex-col items-center justify-center text-white p-6 border border-white/20`}
                     style={{
-                      transform: 'translateZ(25px)',
-                      backfaceVisibility: 'visible'
+                      transform: 'translateZ(50px)',
+                      backfaceVisibility: 'hidden'
                     }}
                   >
-                    <div className="text-3xl mb-3">{item.icon}</div>
-                    <h3 className="text-lg font-bold mb-2 text-center">{item.title}</h3>
-                    <p className="text-xs text-center opacity-90">{item.description}</p>
+                    <div className="text-4xl mb-4">{item.icon}</div>
+                    <h3 className="text-xl font-bold mb-2 text-center">{item.title}</h3>
+                    <p className="text-sm text-center opacity-90">{item.description}</p>
                   </div>
 
                   {/* Back Face */}
                   <div 
-                    className={`absolute inset-0 bg-gradient-to-tl ${item.color} rounded-2xl shadow-2xl flex flex-col items-center justify-center text-white p-3 border border-white/20 backdrop-blur-sm`}
+                    className={`absolute inset-0 bg-gradient-to-tl ${item.color} rounded-2xl shadow-2xl flex flex-col items-center justify-center text-white p-6 border border-white/20`}
                     style={{
-                      transform: 'translateZ(-25px) rotateY(180deg)',
-                      backfaceVisibility: 'visible'
+                      transform: 'translateZ(-50px) rotateY(180deg)',
+                      backfaceVisibility: 'hidden'
                     }}
                   >
-                    <h3 className="text-sm font-bold mb-2 text-center">{item.title}</h3>
-                    <p className="text-xs text-center leading-relaxed opacity-95">{item.content}</p>
+                    <div className="text-3xl mb-4">✨</div>
+                    <h3 className="text-lg font-bold mb-2 text-center">Interactive</h3>
+                    <p className="text-sm text-center opacity-90">Hover to explore</p>
                   </div>
+
+                  {/* Top Face */}
+                  <div 
+                    className={`absolute inset-0 bg-gradient-to-b ${item.color} rounded-2xl shadow-xl opacity-80 border border-white/10`}
+                    style={{
+                      transform: 'rotateX(90deg) translateZ(50px)',
+                      backfaceVisibility: 'hidden'
+                    }}
+                  ></div>
+
+                  {/* Bottom Face */}
+                  <div 
+                    className={`absolute inset-0 bg-gradient-to-t ${item.color} rounded-2xl shadow-xl opacity-60 border border-white/10`}
+                    style={{
+                      transform: 'rotateX(-90deg) translateZ(50px)',
+                      backfaceVisibility: 'hidden'
+                    }}
+                  ></div>
+
+                  {/* Left Face */}
+                  <div 
+                    className={`absolute inset-0 bg-gradient-to-r ${item.color} rounded-2xl shadow-xl opacity-70 border border-white/10`}
+                    style={{
+                      transform: 'rotateY(-90deg) translateZ(50px)',
+                      backfaceVisibility: 'hidden'
+                    }}
+                  ></div>
+
+                  {/* Right Face */}
+                  <div 
+                    className={`absolute inset-0 bg-gradient-to-l ${item.color} rounded-2xl shadow-xl opacity-70 border border-white/10`}
+                    style={{
+                      transform: 'rotateY(90deg) translateZ(50px)',
+                      backfaceVisibility: 'hidden'
+                    }}
+                  ></div>
                 </div>
 
-                {/* Floating info tooltip */}
-                <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="bg-background/90 backdrop-blur-sm border rounded-lg px-3 py-2 text-xs text-foreground whitespace-nowrap">
-                    {item.title}
-                  </div>
-                </div>
+                {/* Reflection Effect */}
+                <div 
+                  className="absolute top-full left-1/2 transform -translate-x-1/2 w-64 h-32 opacity-20 pointer-events-none"
+                  style={{
+                    background: `linear-gradient(to bottom, transparent, ${item.color.includes('orange') ? '#f97316' : item.color.includes('blue') ? '#3b82f6' : '#10b981'})`,
+                    transform: 'translateX(-50%) scaleY(-0.5) translateZ(-10px)',
+                    filter: 'blur(2px)'
+                  }}
+                ></div>
               </div>
             ))}
           </div>
@@ -299,8 +262,8 @@ const Gallery3D = () => {
         {/* Interactive Instructions */}
         <div className={`text-center mt-16 transition-all duration-1000 delay-500 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <p className="text-muted-foreground">
-            <span className="inline-block animate-pulse mr-2">🌟</span>
-            Watch my skills orbit in this interactive solar system - hover to explore each technology in detail
+            <span className="inline-block animate-pulse mr-2">💡</span>
+            Hover over the cubes to see them transform in 3D space
           </p>
         </div>
       </div>
