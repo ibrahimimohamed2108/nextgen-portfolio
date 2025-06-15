@@ -1,12 +1,10 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { ModeToggle } from "@/components/mode-toggle";
-import { Languages } from "@/components/Languages";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { AlignJustify, Moon, Sun } from "lucide-react";
+import { AlignJustify, Moon, Sun, Globe } from "lucide-react";
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Header = () => {
@@ -15,8 +13,8 @@ const Header = () => {
   const headerRef = useRef<HTMLElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const isMobile = useIsMobile();
-  const { theme } = useTheme();
-  const { t } = useLanguage();
+  const { theme, setTheme } = useTheme();
+  const { t, changeLanguage, currentLanguage } = useLanguage();
 
   useEffect(() => {
     setIsMounted(true);
@@ -41,6 +39,14 @@ const Header = () => {
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth' });
     setIsSidebarOpen(false);
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  const toggleLanguage = () => {
+    changeLanguage(currentLanguage === 'en' ? 'fr' : 'en');
   };
 
   const navItems = [
@@ -89,8 +95,16 @@ const Header = () => {
                   </Button>
                 ))}
                 <div className="flex items-center justify-between">
-                  <Languages />
-                  <ModeToggle />
+                  <Button variant="outline" size="icon" onClick={toggleLanguage}>
+                    <Globe className="h-[1.2rem] w-[1.2rem]" />
+                  </Button>
+                  <Button variant="outline" size="icon" onClick={toggleTheme}>
+                    {theme === 'dark' ? (
+                      <Sun className="h-[1.2rem] w-[1.2rem]" />
+                    ) : (
+                      <Moon className="h-[1.2rem] w-[1.2rem]" />
+                    )}
+                  </Button>
                 </div>
               </div>
             </SheetContent>
@@ -114,8 +128,16 @@ const Header = () => {
 
         {isMounted && !isMobile ? (
           <div className="flex items-center gap-2">
-            <Languages />
-            <ModeToggle />
+            <Button variant="outline" size="icon" onClick={toggleLanguage}>
+              <Globe className="h-[1.2rem] w-[1.2rem]" />
+            </Button>
+            <Button variant="outline" size="icon" onClick={toggleTheme}>
+              {theme === 'dark' ? (
+                <Sun className="h-[1.2rem] w-[1.2rem]" />
+              ) : (
+                <Moon className="h-[1.2rem] w-[1.2rem]" />
+              )}
+            </Button>
           </div>
         ) : null}
       </div>
