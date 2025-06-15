@@ -1,7 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-interface UseInViewOptions {
+export interface UseInViewOptions {
   threshold?: number;
   rootMargin?: string;
 }

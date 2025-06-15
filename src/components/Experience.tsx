@@ -14,8 +14,7 @@ const Experience = () => {
     t('experience.mission3'),
     t('experience.mission4'),
     t('experience.mission5'),
-    t('experience.mission6'),
-    t('experience.mission7')
+    t('experience.mission6')
   ];
 
   return (
