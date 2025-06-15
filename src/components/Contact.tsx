@@ -3,16 +3,18 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Mail, Linkedin, Github, MapPin, Send, Phone } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
+import { useToast } from "@/hooks/use-toast";
 
 const Contact = () => {
   const { ref, isInView } = useInView({ threshold: 0.2 });
+  const { toast } = useToast();
 
   const contactMethods = [
     {
       icon: Mail,
       label: "Email",
-      value: "ibrahimimohamed2108@gmail.com",
-      href: "mailto:ibrahimimohamed2108@gmail.com",
+      value: "ibrahimimoahamed2108@gmail.com",
+      href: "mailto:ibrahimimoahamed2108@gmail.com",
       color: "from-red-500 to-pink-600",
       description: "Drop me a line anytime"
     },
@@ -42,6 +44,81 @@ const Contact = () => {
     }
   ];
 
+  const handleContactClick = (method: typeof contactMethods[0]) => {
+    if (method.href) {
+      try {
+        if (method.href.startsWith('mailto:')) {
+          window.location.href = method.href;
+        } else {
+          window.open(method.href, '_blank', 'noopener,noreferrer');
+        }
+        toast({
+          title: `Opening ${method.label}`,
+          description: method.description,
+        });
+        console.log(`Clicked on ${method.label}: ${method.href}`);
+      } catch (error) {
+        console.error(`Error opening ${method.label}:`, error);
+        toast({
+          title: "Error",
+          description: `Unable to open ${method.label}. Please try again.`,
+          variant: "destructive"
+        });
+      }
+    } else {
+      // For location, copy to clipboard
+      navigator.clipboard?.writeText(method.value).then(() => {
+        toast({
+          title: "Location copied",
+          description: "Address copied to clipboard",
+        });
+      }).catch(() => {
+        toast({
+          title: "Location",
+          description: method.value,
+        });
+      });
+    }
+  };
+
+  const handleEmailButtonClick = () => {
+    try {
+      window.location.href = 'mailto:ibrahimimoahamed2108@gmail.com';
+      toast({
+        title: "Opening Email",
+        description: "Launching your email client",
+      });
+      console.log('Opening email client');
+    } catch (error) {
+      console.error('Error opening email:', error);
+      // Fallback: copy email to clipboard
+      navigator.clipboard?.writeText('ibrahimimoahamed2108@gmail.com').then(() => {
+        toast({
+          title: "Email copied",
+          description: "Email address copied to clipboard",
+        });
+      });
+    }
+  };
+
+  const handleLinkedInButtonClick = () => {
+    try {
+      window.open('https://www.linkedin.com/in/ibrahimimohamed', '_blank', 'noopener,noreferrer');
+      toast({
+        title: "Opening LinkedIn",
+        description: "Redirecting to LinkedIn profile",
+      });
+      console.log('Opening LinkedIn profile');
+    } catch (error) {
+      console.error('Error opening LinkedIn:', error);
+      toast({
+        title: "Error",
+        description: "Unable to open LinkedIn. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     <section id="contact" className="py-16 bg-gradient-to-b from-background to-muted/30" ref={ref}>
       <div className="container mx-auto px-4">
@@ -64,48 +141,34 @@ const Contact = () => {
               return (
                 <Card 
                   key={method.label}
-                  className={`group hover:shadow-xl transition-all duration-500 border-0 overflow-hidden ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                  className={`group hover:shadow-xl transition-all duration-500 border-0 overflow-hidden cursor-pointer ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
                   style={{ transitionDelay: `${index * 150}ms` }}
+                  onClick={() => handleContactClick(method)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleContactClick(method);
+                    }
+                  }}
+                  aria-label={`Contact via ${method.label}`}
                 >
                   <CardContent className="p-6">
-                    {method.href ? (
-                      <a
-                        href={method.href}
-                        target={method.href.startsWith('http') ? '_blank' : undefined}
-                        rel={method.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className="block cursor-pointer"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className={`p-3 rounded-lg bg-gradient-to-br ${method.color} group-hover:scale-110 transition-transform duration-300`}>
-                            <IconComponent className="h-6 w-6 text-white" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
-                              {method.label}
-                            </h3>
-                            <p className="text-xs text-muted-foreground mb-2">{method.description}</p>
-                            <p className="text-sm text-muted-foreground break-all">
-                              {method.value}
-                            </p>
-                          </div>
-                        </div>
-                      </a>
-                    ) : (
-                      <div className="flex items-start gap-4">
-                        <div className={`p-3 rounded-lg bg-gradient-to-br ${method.color} group-hover:scale-110 transition-transform duration-300`}>
-                          <IconComponent className="h-6 w-6 text-white" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
-                            {method.label}
-                          </h3>
-                          <p className="text-xs text-muted-foreground mb-2">{method.description}</p>
-                          <p className="text-sm text-muted-foreground break-all">
-                            {method.value}
-                          </p>
-                        </div>
+                    <div className="flex items-start gap-4">
+                      <div className={`p-3 rounded-lg bg-gradient-to-br ${method.color} group-hover:scale-110 transition-transform duration-300`}>
+                        <IconComponent className="h-6 w-6 text-white" />
                       </div>
-                    )}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
+                          {method.label}
+                        </h3>
+                        <p className="text-xs text-muted-foreground mb-2">{method.description}</p>
+                        <p className="text-sm text-muted-foreground break-all">
+                          {method.value}
+                        </p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               );
@@ -125,17 +188,22 @@ const Contact = () => {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button asChild size="lg" className="group bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 hover:scale-105 transition-all duration-300">
-                    <a href="mailto:ibrahimimohamed2108@gmail.com">
-                      <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                      Send Email
-                    </a>
+                  <Button 
+                    size="lg" 
+                    className="group bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 hover:scale-105 transition-all duration-300"
+                    onClick={handleEmailButtonClick}
+                  >
+                    <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    Send Email
                   </Button>
-                  <Button variant="outline" size="lg" asChild className="group hover:scale-105 transition-all duration-300 border-primary/20 hover:border-primary/40">
-                    <a href="https://www.linkedin.com/in/ibrahimimohamed" target="_blank" rel="noopener noreferrer">
-                      <Linkedin className="mr-2 h-5 w-5 group-hover:text-blue-600 transition-colors" />
-                      Connect on LinkedIn
-                    </a>
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="group hover:scale-105 transition-all duration-300 border-primary/20 hover:border-primary/40"
+                    onClick={handleLinkedInButtonClick}
+                  >
+                    <Linkedin className="mr-2 h-5 w-5 group-hover:text-blue-600 transition-colors" />
+                    Connect on LinkedIn
                   </Button>
                 </div>
               </div>

@@ -11,7 +11,9 @@ const Hero = () => {
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
-    element?.scrollIntoView({ behavior: 'smooth' });
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const downloadCV = () => {
@@ -113,32 +115,53 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
 
 > 🔍 *Available for collaboration, internships, and innovative tech projects.*`;
 
-    // Create a blob with the CV content
-    const blob = new Blob([cvContent], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    
-    // Create a temporary link and trigger download
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Mohamed_IBRAHIMI_CV_${language.toUpperCase()}.md`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    // Clean up the URL
-    URL.revokeObjectURL(url);
+    try {
+      const blob = new Blob([cvContent], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Mohamed_IBRAHIMI_CV_${language.toUpperCase()}.md`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      URL.revokeObjectURL(url);
+      console.log('CV downloaded successfully');
+    } catch (error) {
+      console.error('Error downloading CV:', error);
+      // Fallback: open mailto with CV content
+      window.open(`mailto:?subject=Mohamed IBRAHIMI - CV&body=${encodeURIComponent(cvContent.substring(0, 1000) + '...')}`);
+    }
   };
 
   const openGitHub = () => {
-    window.open('https://github.com/ibrahimimohamed2108', '_blank');
+    try {
+      window.open('https://github.com/ibrahimimohamed2108', '_blank', 'noopener,noreferrer');
+      console.log('Opening GitHub profile');
+    } catch (error) {
+      console.error('Error opening GitHub:', error);
+    }
   };
 
   const openLinkedIn = () => {
-    window.open('https://www.linkedin.com/in/ibrahimimohamed', '_blank');
+    try {
+      window.open('https://www.linkedin.com/in/ibrahimimohamed', '_blank', 'noopener,noreferrer');
+      console.log('Opening LinkedIn profile');
+    } catch (error) {
+      console.error('Error opening LinkedIn:', error);
+    }
   };
 
   const openEmail = () => {
-    window.location.href = 'mailto:ibrahimimoahamed2108@gmail.com';
+    try {
+      window.location.href = 'mailto:ibrahimimoahamed2108@gmail.com';
+      console.log('Opening email client');
+    } catch (error) {
+      console.error('Error opening email:', error);
+      // Fallback: copy email to clipboard
+      navigator.clipboard?.writeText('ibrahimimoahamed2108@gmail.com');
+    }
   };
 
   return (
@@ -235,6 +258,7 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
                   variant="ghost" 
                   className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
                   onClick={openGitHub}
+                  aria-label="Visit GitHub Profile"
                 >
                   <Github className="h-5 w-5" />
                 </Button>
@@ -243,6 +267,7 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
                   variant="ghost" 
                   className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
                   onClick={openLinkedIn}
+                  aria-label="Visit LinkedIn Profile"
                 >
                   <Linkedin className="h-5 w-5" />
                 </Button>
@@ -251,6 +276,7 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
                   variant="ghost" 
                   className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
                   onClick={openEmail}
+                  aria-label="Send Email"
                 >
                   <Mail className="h-5 w-5" />
                 </Button>

@@ -1,6 +1,6 @@
-
 import { useEffect, useRef } from 'react';
 import { useInView } from '@/hooks/useInView';
+import { useToast } from '@/hooks/use-toast';
 
 declare global {
   interface Window {
@@ -14,43 +14,56 @@ const Gallery3D = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
   const floatingAnimationRef = useRef<any>(null);
+  const { toast } = useToast();
 
   const galleryItems = [
     {
       title: "AWS DevOps",
       description: "Cloud Infrastructure & CI/CD",
       icon: "☁️",
-      color: "from-orange-500 to-yellow-500"
+      color: "from-orange-500 to-yellow-500",
+      link: "https://github.com/ibrahimimohamed2108/erp-clone",
+      details: "Automated CI/CD pipeline on AWS using Jenkins, Kubernetes & Terraform"
     },
     {
       title: "React Development",
       description: "Modern Frontend Applications",
       icon: "⚛️",
-      color: "from-blue-500 to-cyan-500"
+      color: "from-blue-500 to-cyan-500",
+      link: "https://github.com/ibrahimimohamed2108",
+      details: "Building responsive and interactive web applications"
     },
     {
       title: "Database Systems",
       description: "MySQL & Data Management",
       icon: "🗄️",
-      color: "from-green-500 to-emerald-500"
+      color: "from-green-500 to-emerald-500",
+      link: "https://github.com/ibrahimimohamed2108",
+      details: "Database design, optimization and management"
     },
     {
       title: "Spring Boot",
       description: "Backend API Development",
       icon: "🍃",
-      color: "from-green-600 to-lime-500"
+      color: "from-green-600 to-lime-500",
+      link: "https://github.com/ibrahimimohamed2108",
+      details: "RESTful APIs and microservices architecture"
     },
     {
       title: "Docker & K8s",
       description: "Containerization & Orchestration",
       icon: "🐳",
-      color: "from-blue-600 to-indigo-500"
+      color: "from-blue-600 to-indigo-500",
+      link: "https://github.com/ibrahimimohamed2108",
+      details: "Container deployment and orchestration"
     },
     {
       title: "TypeScript",
       description: "Type-Safe Development",
       icon: "📘",
-      color: "from-blue-700 to-purple-500"
+      color: "from-blue-700 to-purple-500",
+      link: "https://github.com/ibrahimimohamed2108",
+      details: "Building scalable applications with type safety"
     }
   ];
 
@@ -164,6 +177,24 @@ const Gallery3D = () => {
     }
   };
 
+  const handleCubeClick = (item: typeof galleryItems[0]) => {
+    try {
+      window.open(item.link, '_blank', 'noopener,noreferrer');
+      toast({
+        title: `Opening ${item.title}`,
+        description: item.details,
+      });
+      console.log(`Clicked on ${item.title}: ${item.link}`);
+    } catch (error) {
+      console.error('Error opening link:', error);
+      toast({
+        title: "Error",
+        description: "Unable to open the link. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     <section 
       id="gallery3d" 
@@ -185,7 +216,7 @@ const Gallery3D = () => {
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
             Explore my technical expertise through this interactive 3D showcase. 
-            Each cube represents a key area of my development skills.
+            Each cube represents a key area of my development skills. Click to explore!
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-blue-600 mx-auto rounded-full"></div>
         </div>
@@ -216,6 +247,16 @@ const Gallery3D = () => {
                 }}
                 onMouseEnter={() => handleCubeHover(index, true)}
                 onMouseLeave={() => handleCubeHover(index, false)}
+                onClick={() => handleCubeClick(item)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleCubeClick(item);
+                  }
+                }}
+                aria-label={`Open ${item.title} project`}
               >
                 {/* 3D Cube Container */}
                 <div 
@@ -226,15 +267,16 @@ const Gallery3D = () => {
                 >
                   {/* Front Face */}
                   <div 
-                    className={`absolute inset-0 bg-gradient-to-br ${item.color} rounded-2xl shadow-xl flex flex-col items-center justify-center text-white p-6 border border-white/20 backdrop-blur-sm`}
+                    className={`absolute inset-0 bg-gradient-to-br ${item.color} rounded-2xl shadow-xl flex flex-col items-center justify-center text-white p-6 border border-white/20 backdrop-blur-sm group-hover:shadow-2xl transition-shadow duration-300`}
                     style={{
                       transform: 'translateZ(30px)',
                       backfaceVisibility: 'hidden'
                     }}
                   >
-                    <div className="text-4xl mb-4 filter drop-shadow-lg">{item.icon}</div>
+                    <div className="text-4xl mb-4 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">{item.icon}</div>
                     <h3 className="text-xl font-bold mb-2 text-center drop-shadow-md">{item.title}</h3>
                     <p className="text-sm text-center opacity-90 drop-shadow-sm">{item.description}</p>
+                    <div className="mt-3 text-xs opacity-75 text-center">Click to explore</div>
                   </div>
 
                   {/* Back Face */}
@@ -304,7 +346,7 @@ const Gallery3D = () => {
         <div className={`text-center mt-20 transition-all duration-1000 delay-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <p className="text-muted-foreground text-lg">
             <span className="inline-block animate-pulse mr-2 text-xl">💡</span>
-            Hover over the cubes to see them transform in 3D space
+            Hover over the cubes to see them transform in 3D space, click to explore projects
           </p>
         </div>
       </div>
