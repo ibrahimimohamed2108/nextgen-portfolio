@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -13,8 +12,8 @@ const Header = () => {
   const headerRef = useRef<HTMLElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const isMobile = useIsMobile();
-  const { theme, setTheme } = useTheme();
-  const { t, changeLanguage, currentLanguage } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
+  const { t, toggleLanguage } = useLanguage();
 
   useEffect(() => {
     setIsMounted(true);
@@ -39,14 +38,6 @@ const Header = () => {
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth' });
     setIsSidebarOpen(false);
-  };
-
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
-
-  const toggleLanguage = () => {
-    changeLanguage(currentLanguage === 'en' ? 'fr' : 'en');
   };
 
   const navItems = [
