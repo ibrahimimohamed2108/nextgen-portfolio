@@ -1,22 +1,10 @@
 
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import Experience from "@/components/Experience";
-import Education from "@/components/Education";
-import Skills from "@/components/Skills";
-import Contact from "@/components/Contact";
+import { Portfolio3D } from "@/components/Portfolio3D";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      <main>
-        <Hero />
-        <Experience />
-        <Education />
-        <Skills />
-        <Contact />
-      </main>
+      <Portfolio3D />
     </div>
   );
 };

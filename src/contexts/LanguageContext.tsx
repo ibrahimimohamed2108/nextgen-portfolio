@@ -1,218 +1,255 @@
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
-type Language = 'en' | 'fr';
-
-interface LanguageContextType {
-  language: Language;
+interface LanguageContextProps {
+  language: string;
   toggleLanguage: () => void;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, any>) => string;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
-export const useLanguage = () => {
+const translations = {
+  en: {
+    nav: {
+      about: 'About',
+      experience: 'Experience',
+      education: 'Education',
+      skills: 'Skills',
+      contact: 'Contact'
+    },
+    hero: {
+      greeting: "Hello, I'm",
+      title: 'Software Engineer',
+      subtitle: 'MSc. Engineering Student',
+      description: "I'm a passionate engineering student dedicated to innovation and technology. Explore my portfolio to see how I'm shaping the future.",
+      downloadCV: 'Download CV',
+      contactMe: 'Contact Me'
+    },
+    experience: {
+      title: 'Experience',
+      position: 'Software Development Intern',
+      company: 'OCP Group',
+      duration: 'June 2024 - August 2024',
+      location: 'Khouribga, Morocco',
+      description: "Software development intern at OCP Group, working on innovative solutions to improve industrial processes and optimize resource management.",
+      missions: 'Missions',
+      mission1: 'Development of a web application for real-time monitoring of industrial data using React and TypeScript.',
+      mission2: 'Implementation of RESTful APIs using Node.js and Express to ensure seamless data exchange between the front-end and back-end.',
+      mission3: 'Integration of real-time data visualization tools using libraries such as Chart.js and D3.js.',
+      mission4: 'Optimization of database queries using MongoDB to improve application performance and reduce latency.',
+      mission5: 'Collaboration with a multidisciplinary team to design and implement new features based on user needs.',
+      mission6: 'Application of Agile methodologies to manage projects and ensure on-time delivery of deliverables.',
+      mission7: 'Participation in code reviews and testing to ensure code quality and application reliability.'
+    },
+    education: {
+      title: 'Education',
+      engineering: 'Engineering Degree',
+      'engineering.school': 'National School of Applied Sciences',
+      'engineering.period': '2022 - 2025',
+      'engineering.description': 'Currently pursuing an engineering degree with a focus on software development and data science.',
+      prep: 'Preparatory Classes for Engineering Schools',
+      'prep.school': 'CPGE Lycée Moulay Youssef',
+      'prep.period': '2020 - 2022',
+      'prep.description': 'Intensive two-year program focused on mathematics, physics, and engineering sciences to prepare for competitive entrance exams to top engineering schools.',
+      bac: 'Baccalaureate Degree in Physics and Chemistry',
+      'bac.school': 'Lycée Mohamed V',
+      'bac.period': '2019 - 2020',
+      'bac.description': 'High school diploma with a focus on physics and chemistry, providing a strong foundation in scientific principles and analytical thinking.',
+      type: {
+        engineering: 'Engineering School',
+        preparatory: 'Preparatory Classes',
+        highSchool: 'High School'
+      },
+      status: {
+        inProgress: 'In Progress',
+        completed: 'Completed'
+      }
+    },
+    skills: {
+      title: 'Skills',
+      description: 'Technical expertise and professional competencies.',
+      technical: 'Technical Skills',
+      professional: 'Professional Skills',
+      languages: 'Languages'
+    },
+    contact: {
+      title: 'Contact',
+      description: 'Get in touch for collaborations and opportunities.',
+      name: 'Name',
+      email: 'Email',
+      message: 'Message',
+      send: 'Send Message',
+      success: 'Message sent successfully!',
+      error: 'Failed to send message. Please try again.'
+    },
+    '3d': {
+      enter: 'Enter 3D',
+      exit: 'Exit 3D',
+      mode: '3D Mode',
+      controls: 'Controls',
+      click: 'Click sections to navigate',
+      drag: 'Drag to rotate view',
+      terminal: 'Use terminal for interactions'
+    },
+    story: {
+      enter: 'Story Mode',
+      exit: 'Exit Story',
+      mode: 'Story Mode'
+    },
+    '2d': {
+      mode: '2D Mode'
+    }
+  },
+  fr: {
+    nav: {
+      about: 'À propos',
+      experience: 'Expérience',
+      education: 'Éducation',
+      skills: 'Compétences',
+      contact: 'Contact'
+    },
+    hero: {
+      greeting: 'Bonjour, je suis',
+      title: 'Ingénieur Logiciel',
+      subtitle: 'Étudiant en Ingénierie (MSc.)',
+      description: "Étudiant en ingénierie passionné par l'innovation et la technologie. Explorez mon portfolio pour voir comment je façonne l'avenir.",
+      downloadCV: 'Télécharger CV',
+      contactMe: 'Contactez-moi'
+    },
+    experience: {
+      title: 'Expérience',
+      position: 'Stagiaire en Développement Logiciel',
+      company: 'OCP Group',
+      duration: 'Juin 2024 - Août 2024',
+      location: 'Khouribga, Maroc',
+      description: "Stagiaire en développement logiciel chez OCP Group, travaillant sur des solutions innovantes pour améliorer les processus industriels et optimiser la gestion des ressources.",
+      missions: 'Missions',
+      mission1: 'Développement d\'une application web pour la surveillance en temps réel des données industrielles en utilisant React et TypeScript.',
+      mission2: 'Implémentation d\'APIs RESTful en utilisant Node.js et Express pour assurer un échange de données fluide entre le front-end et le back-end.',
+      mission3: 'Intégration d\'outils de visualisation de données en temps réel en utilisant des bibliothèques telles que Chart.js et D3.js.',
+      mission4: 'Optimisation des requêtes de base de données en utilisant MongoDB pour améliorer les performances de l\'application et réduire la latence.',
+      mission5: 'Collaboration avec une équipe multidisciplinaire pour concevoir et implémenter de nouvelles fonctionnalités basées sur les besoins des utilisateurs.',
+      mission6: 'Application des méthodologies Agile pour gérer les projets et assurer la livraison des livrables dans les délais.',
+      mission7: 'Participation aux revues de code et aux tests pour assurer la qualité du code et la fiabilité de l\'application.'
+    },
+    education: {
+      title: 'Éducation',
+      engineering: 'Diplôme d\'Ingénieur',
+      'engineering.school': 'École Nationale des Sciences Appliquées',
+      'engineering.period': '2022 - 2025',
+      'engineering.description': 'Poursuit actuellement un diplôme d\'ingénieur avec une spécialisation en développement logiciel et science des données.',
+      prep: 'Classes Préparatoires aux Grandes Écoles d\'Ingénieurs',
+      'prep.school': 'CPGE Lycée Moulay Youssef',
+      'prep.period': '2020 - 2022',
+      'prep.description': 'Programme intensif de deux ans axé sur les mathématiques, la physique et les sciences de l\'ingénieur pour préparer aux concours d\'entrée aux grandes écoles d\'ingénieurs.',
+      bac: 'Baccalauréat en Physique-Chimie',
+      'bac.school': 'Lycée Mohamed V',
+      'bac.period': '2019 - 2020',
+      'bac.description': 'Diplôme de fin d\'études secondaires avec une spécialisation en physique-chimie, fournissant une base solide en principes scientifiques et en pensée analytique.',
+      type: {
+        engineering: 'École d\'Ingénieur',
+        preparatory: 'Classes Préparatoires',
+        highSchool: 'Lycée'
+      },
+      status: {
+        inProgress: 'En Cours',
+        completed: 'Terminé'
+      }
+    },
+    skills: {
+      title: 'Compétences',
+      description: 'Expertise technique et compétences professionnelles.',
+      technical: 'Compétences Techniques',
+      professional: 'Compétences Professionnelles',
+      languages: 'Langues'
+    },
+    contact: {
+      title: 'Contact',
+      description: 'Contactez-moi pour des collaborations et opportunités.',
+      name: 'Nom',
+      email: 'Email',
+      message: 'Message',
+      send: 'Envoyer Message',
+      success: 'Message envoyé avec succès!',
+      error: 'Échec de l\'envoi du message. Veuillez réessayer.'
+    },
+    '3d': {
+      enter: 'Mode 3D',
+      exit: 'Quitter 3D',
+      mode: 'Mode 3D',
+      controls: 'Contrôles',
+      click: 'Cliquez sur les sections pour naviguer',
+      drag: 'Faites glisser pour faire pivoter',
+      terminal: 'Utilisez le terminal pour les interactions'
+    },
+    story: {
+      enter: 'Mode Histoire',
+      exit: 'Quitter Histoire',
+      mode: 'Mode Histoire'
+    },
+    '2d': {
+      mode: 'Mode 2D'
+    }
+  }
+};
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources: {
+      en: { translation: translations.en },
+      fr: { translation: translations.fr }
+    },
+    lng: 'en',
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false
+    }
+  });
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguage] = useState<string>(i18n.language);
+
+  useEffect(() => {
+    i18n.on('languageChanged', (lng) => {
+      setLanguage(lng);
+    });
+
+    return () => {
+      i18n.off('languageChanged');
+    };
+  }, []);
+
+  const toggleLanguage = useCallback(() => {
+    const newLanguage = language === 'en' ? 'fr' : 'en';
+    i18n.changeLanguage(newLanguage);
+    setLanguage(newLanguage);
+  }, [language]);
+
+  const t = useCallback((key: string, params?: Record<string, any>) => {
+    return i18n.t(key, { ...params });
+  }, []);
+
+  const value: LanguageContextProps = {
+    language,
+    toggleLanguage,
+    t
+  };
+
+  return (
+    <LanguageContext.Provider value={value}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const useLanguage = (): LanguageContextProps => {
   const context = useContext(LanguageContext);
   if (!context) {
     throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;
-};
-
-const translations = {
-  en: {
-    // Navigation
-    'nav.about': 'About',
-    'nav.experience': 'Experience',
-    'nav.education': 'Education',
-    'nav.skills': 'Skills',
-    'nav.contact': 'Contact',
-    
-    // Hero Section
-    'hero.greeting': 'Hello, I\'m',
-    'hero.title': 'Computer Engineering Student',
-    'hero.subtitle': 'Specialized in DevOps & Cloud Computing',
-    'hero.description': 'Computer engineering student passionate about software development and cloud computing, specializing in DevOps practices, CI/CD pipeline automation and cloud technologies.',
-    'hero.downloadCV': 'Download CV',
-    'hero.contactMe': 'Contact Me',
-    
-    // Experience Section
-    'experience.title': 'Professional Experience',
-    'experience.position': 'IT Systems Urbanization Intern',
-    'experience.company': 'General Treasury of the Kingdom',
-    'experience.duration': 'July 2024 (1 month)',
-    'experience.location': 'Rabat, Morocco',
-    'experience.description': 'At the General Treasury of the Kingdom, I participated in IT systems urbanization, aimed at structuring and optimizing computer systems architecture for better interoperability and IT resource management.',
-    'experience.missions': 'Missions accomplished:',
-    'experience.mission1': 'Deployment and configuration of GLPI (ITSM), Mercator (SIEM & SI mapping) and OpenProject (agile project management) solutions',
-    'experience.mission2': 'Implementation of virtualized infrastructure',
-    'experience.mission3': 'MySQL database management (schema creation, privilege management, query optimization)',
-    'experience.mission4': 'Integration of centralized authentication with LDAP and Active Directory',
-    'experience.mission5': 'Application performance optimization via Apache2, PHP and specific configurations',
-    'experience.mission6': 'Writing detailed user guides for each deployed solution',
-    'experience.mission7': 'Presentation and demonstration of tools and solutions to IT and business teams',
-    
-    // Education Section
-    'education.title': 'Academic Journey',
-    'education.engineering': 'State Engineer, Computer Engineering and Digitalization',
-    'education.engineering.school': 'Mohammadia School of Engineers',
-    'education.engineering.period': '2023 - 2026',
-    'education.engineering.description': 'Specialized in software engineering and cloud computing with focus on DevOps practices.',
-    'education.prep': 'Mathematics and Physics',
-    'education.prep.school': 'CPGE - Preparatory Classes for Grande Écoles',
-    'education.prep.period': '2021 - 2023',
-    'education.prep.description': 'Intensive preparation program focusing on advanced mathematics and physics.',
-    'education.bac': 'Baccalaureate, Mathematical Sciences A',
-    'education.bac.school': 'Mohammed VI High School, Oujda',
-    'education.bac.period': 'September 2020 - June 2021',
-    'education.bac.description': 'Scientific track with emphasis on mathematics and natural sciences.',
-    'education.status.inProgress': 'In Progress',
-    'education.status.completed': 'Completed',
-    'education.type.engineering': 'Engineering Degree',
-    'education.type.preparatory': 'Preparatory Classes',
-    'education.type.highSchool': 'High School Diploma',
-    
-    // Skills Section
-    'skills.title': 'Technical Skills',
-    'skills.subtitle': 'Technologies & Tools I Work With',
-    'skills.category.frontend': 'Frontend Development',
-    'skills.category.backend': 'Backend Development',
-    'skills.category.devops': 'DevOps & Cloud',
-    'skills.category.databases': 'Databases',
-    'skills.category.tools': 'Development Tools',
-    'skills.category.languages': 'Programming Languages',
-    
-    // Contact Section
-    'contact.title': 'Get In Touch',
-    'contact.subtitle': 'Let\'s Build Something Amazing Together',
-    'contact.description': 'I\'m always interested in new opportunities and interesting projects. Whether you have a question or just want to say hi, I\'ll try my best to get back to you!',
-    'contact.email': 'Email',
-    'contact.linkedin': 'LinkedIn',
-    'contact.github': 'GitHub',
-    'contact.sendMessage': 'Send Message',
-    'contact.form.name': 'Your Name',
-    'contact.form.email': 'Your Email',
-    'contact.form.subject': 'Subject',
-    'contact.form.message': 'Your Message',
-    'contact.form.send': 'Send Message',
-    'contact.form.sending': 'Sending...',
-    
-    // Common
-    'common.loading': 'Loading...',
-    'common.error': 'An error occurred',
-    'common.success': 'Success!'
-  },
-  fr: {
-    // Navigation
-    'nav.about': 'À Propos',
-    'nav.experience': 'Expérience',
-    'nav.education': 'Formation',
-    'nav.skills': 'Compétences',
-    'nav.contact': 'Contact',
-    
-    // Hero Section
-    'hero.greeting': 'Bonjour, je suis',
-    'hero.title': 'Étudiant en Génie Informatique',
-    'hero.subtitle': 'Spécialisé en DevOps et Cloud Computing',
-    'hero.description': 'Élève ingénieur en informatique passionné par le développement logiciel et le cloud computing, je me spécialise dans les pratiques DevOps, l\'automatisation des pipelines CI/CD et les technologies cloud.',
-    'hero.downloadCV': 'Télécharger CV',
-    'hero.contactMe': 'Me Contacter',
-    
-    // Experience Section
-    'experience.title': 'Expérience Professionnelle',
-    'experience.position': 'Stagiaire en Urbanisation des Systèmes d\'Information',
-    'experience.company': 'Trésorerie Générale du Royaume',
-    'experience.duration': 'Juillet 2024 (1 mois)',
-    'experience.location': 'Rabat, Maroc',
-    'experience.description': 'Au sein de la Trésorerie Générale du Royaume, j\'ai participé à l\'urbanisation du SI, visant à structurer et optimiser l\'architecture des systèmes informatiques pour une meilleure interopérabilité et gestion des ressources IT.',
-    'experience.missions': 'Missions réalisées :',
-    'experience.mission1': 'Déploiement et configuration des solutions GLPI (ITSM), Mercator (SIEM & cartographie SI) et OpenProject (gestion de projet agile)',
-    'experience.mission2': 'Mise en place d\'une infrastructure virtualisée',
-    'experience.mission3': 'Gestion des bases de données MySQL (création des schémas, gestion des privilèges, optimisation des requêtes)',
-    'experience.mission4': 'Intégration de l\'authentification centralisée avec LDAP et Active Directory',
-    'experience.mission5': 'Optimisation des performances des applications via Apache2, PHP et configurations spécifiques',
-    'experience.mission6': 'Rédaction de guides d\'utilisation détaillés pour chaque solution déployée',
-    'experience.mission7': 'Présentation et démonstration des outils et solutions auprès des équipes IT et métiers',
-    
-    // Education Section
-    'education.title': 'Parcours Académique',
-    'education.engineering': 'Ingénieur d\'état, Génie Informatique et Digitalisation',
-    'education.engineering.school': 'École Mohammadia d\'Ingénieurs',
-    'education.engineering.period': '2023 - 2026',
-    'education.engineering.description': 'Spécialisé en génie logiciel et cloud computing avec un focus sur les pratiques DevOps.',
-    'education.prep': 'Mathématiques et Physique',
-    'education.prep.school': 'CPGE - Classes préparatoires aux grandes écoles',
-    'education.prep.period': '2021 - 2023',
-    'education.prep.description': 'Programme de préparation intensive axé sur les mathématiques et la physique avancées.',
-    'education.bac': 'Baccalauréat, Sciences Mathématiques A',
-    'education.bac.school': 'Lycée Mohammed VI, Oujda',
-    'education.bac.period': 'Septembre 2020 - Juin 2021',
-    'education.bac.description': 'Filière scientifique avec accent sur les mathématiques et sciences naturelles.',
-    'education.status.inProgress': 'En Cours',
-    'education.status.completed': 'Terminé',
-    'education.type.engineering': 'Diplôme d\'Ingénieur',
-    'education.type.preparatory': 'Classes Préparatoires',
-    'education.type.highSchool': 'Diplôme de Lycée',
-    
-    // Skills Section
-    'skills.title': 'Compétences Techniques',
-    'skills.subtitle': 'Technologies et Outils que j\'utilise',
-    'skills.category.frontend': 'Développement Frontend',
-    'skills.category.backend': 'Développement Backend',
-    'skills.category.devops': 'DevOps et Cloud',
-    'skills.category.databases': 'Bases de Données',
-    'skills.category.tools': 'Outils de Développement',
-    'skills.category.languages': 'Langages de Programmation',
-    
-    // Contact Section
-    'contact.title': 'Prenons Contact',
-    'contact.subtitle': 'Construisons Quelque Chose d\'Extraordinaire Ensemble',
-    'contact.description': 'Je suis toujours intéressé par de nouvelles opportunités et des projets intéressants. Que vous ayez une question ou que vous vouliez simplement dire bonjour, je ferai de mon mieux pour vous répondre !',
-    'contact.email': 'Email',
-    'contact.linkedin': 'LinkedIn',
-    'contact.github': 'GitHub',
-    'contact.sendMessage': 'Envoyer un Message',
-    'contact.form.name': 'Votre Nom',
-    'contact.form.email': 'Votre Email',
-    'contact.form.subject': 'Sujet',
-    'contact.form.message': 'Votre Message',
-    'contact.form.send': 'Envoyer le Message',
-    'contact.form.sending': 'Envoi en cours...',
-    
-    // Common
-    'common.loading': 'Chargement...',
-    'common.error': 'Une erreur s\'est produite',
-    'common.success': 'Succès !'
-  }
-};
-
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('language') as Language;
-      if (stored) return stored;
-      return navigator.language.startsWith('fr') ? 'fr' : 'en';
-    }
-    return 'en';
-  });
-
-  useEffect(() => {
-    localStorage.setItem('language', language);
-    document.documentElement.lang = language;
-  }, [language]);
-
-  const toggleLanguage = () => {
-    const newLanguage = language === 'en' ? 'fr' : 'en';
-    setLanguage(newLanguage);
-  };
-
-  const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations['en']] || key;
-  };
-
-  return (
-    <LanguageContext.Provider value={{ language, toggleLanguage, t }}>
-      {children}
-    </LanguageContext.Provider>
-  );
 };
