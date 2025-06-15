@@ -26,7 +26,7 @@ const LazySection = ({
   const LazyComponent = lazy(componentImport);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref as React.RefObject<HTMLDivElement>} className={className}>
       {isInView && (
         <ErrorBoundary>
           <Suspense fallback={fallback || <LoadingSpinner text="Loading section..." />}>

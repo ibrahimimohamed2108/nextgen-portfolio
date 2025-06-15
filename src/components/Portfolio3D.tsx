@@ -16,8 +16,8 @@ const Contact = lazy(() => import('./Contact'));
 const Projects = lazy(() => import('./Projects'));
 const Gallery3D = lazy(() => import('./Gallery3D'));
 const TechSolarSystem = lazy(() => import('./TechSolarSystem'));
-const InteractiveTerminal = lazy(() => import('./interactive/InteractiveTerminal'));
-const ImmersiveStory = lazy(() => import('./story/ImmersiveStory'));
+const InteractiveTerminal = lazy(() => import('./interactive/InteractiveTerminal').then(module => ({ default: module.InteractiveTerminal })));
+const ImmersiveStory = lazy(() => import('./story/ImmersiveStory').then(module => ({ default: module.ImmersiveStory })));
 
 const Portfolio3D = () => {
   usePerformanceMonitor('Portfolio3D');

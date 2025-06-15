@@ -9,12 +9,12 @@ interface UseIntersectionObserverProps {
 
 export const useIntersectionObserver = (
   options: UseIntersectionObserverProps = {}
-): [RefObject<HTMLElement>, boolean] => {
+): [RefObject<HTMLDivElement>, boolean] => {
   const { threshold = 0.1, rootMargin = '0px', freezeOnceVisible = false } = options;
   
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasBeenVisible, setHasBeenVisible] = useState(false);
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
