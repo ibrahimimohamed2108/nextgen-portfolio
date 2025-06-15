@@ -14,25 +14,29 @@ const Projects = () => {
       id: 'cicd',
       icon: Cloud,
       color: 'from-orange-500 to-red-600',
-      skills: ['Jenkins', 'Kubernetes', 'Terraform', 'AWS', 'CI/CD', 'DevOps']
+      skills: ['Jenkins', 'Kubernetes', 'Terraform', 'AWS', 'CI/CD', 'DevOps'],
+      githubUrl: 'https://github.com/ibrahimimohamed2108/erp-clone'
     },
     {
       id: 'ecommerce',
       icon: ShoppingCart,
       color: 'from-blue-500 to-cyan-600',
-      skills: ['Angular', 'Firebase', 'TypeScript', 'Web Development']
+      skills: ['Angular', 'Firebase', 'TypeScript', 'Web Development'],
+      githubUrl: 'https://github.com/ibrahimimohamed2108/angEcom1'
     },
     {
       id: 'restaurant',
       icon: Utensils,
       color: 'from-green-500 to-emerald-600',
-      skills: ['C Programming', 'System Design', 'Database Management']
+      skills: ['C Programming', 'System Design', 'Database Management'],
+      githubUrl: 'https://github.com/ibrahimimohamed2108/ProjetRestau_C'
     }
   ];
 
   return (
     <section 
       ref={ref} 
+      id="projects"
       className="relative w-full py-20 bg-gradient-to-b from-muted/30 to-background overflow-hidden"
       style={{ isolation: 'isolate' }}
     >
@@ -96,11 +100,17 @@ const Projects = () => {
                         </p>
                         
                         <div className="flex gap-2">
-                          <button className="flex items-center gap-2 text-xs px-3 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors">
+                          <button 
+                            onClick={() => window.open(project.githubUrl, '_blank')}
+                            className="flex items-center gap-2 text-xs px-3 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors"
+                          >
                             <ExternalLink className="h-3 w-3" />
                             {t('projects.viewProject')}
                           </button>
-                          <button className="flex items-center gap-2 text-xs px-3 py-2 bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors">
+                          <button 
+                            onClick={() => window.open(project.githubUrl, '_blank')}
+                            className="flex items-center gap-2 text-xs px-3 py-2 bg-muted text-muted-foreground rounded-lg hover:bg-muted/80 transition-colors"
+                          >
                             <Github className="h-3 w-3" />
                             {t('projects.sourceCode')}
                           </button>

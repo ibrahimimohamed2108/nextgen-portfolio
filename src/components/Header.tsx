@@ -27,10 +27,11 @@ const Header = () => {
   };
 
   const navItems = [
-    { id: 'about', label: t('nav.about') },
+    { id: 'hero', label: t('nav.about') },
     { id: 'experience', label: t('nav.experience') },
     { id: 'education', label: t('nav.education') },
     { id: 'skills', label: t('nav.skills') },
+    { id: 'projects', label: t('nav.projects') || 'Projects' },
     { id: 'contact', label: t('nav.contact') }
   ];
 
@@ -43,7 +44,7 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <nav className="flex items-center justify-between">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent hover:scale-105 transition-transform cursor-pointer"
-              onClick={() => scrollToSection('about')}>
+              onClick={() => scrollToSection('hero')}>
             Mohamed IBRAHIMI
           </h1>
           
