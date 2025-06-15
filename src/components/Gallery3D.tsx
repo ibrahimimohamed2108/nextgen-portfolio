@@ -18,36 +18,42 @@ const Gallery3D = () => {
     {
       title: "AWS DevOps",
       description: "Cloud Infrastructure & CI/CD",
+      content: "Deployed scalable applications using EC2, S3, and Lambda. Implemented automated CI/CD pipelines with Jenkins and Docker for seamless deployments.",
       icon: "☁️",
       color: "from-orange-500 to-yellow-500"
     },
     {
       title: "React Development",
       description: "Modern Frontend Applications",
+      content: "Built responsive web applications using React, TypeScript, and modern state management. Expertise in component architecture and performance optimization.",
       icon: "⚛️",
       color: "from-blue-500 to-cyan-500"
     },
     {
       title: "Database Systems",
       description: "MySQL & Data Management",
+      content: "Designed and optimized database schemas, implemented complex queries, and managed data integrity across multiple applications and systems.",
       icon: "🗄️",
       color: "from-green-500 to-emerald-500"
     },
     {
       title: "Spring Boot",
       description: "Backend API Development",
+      content: "Developed RESTful APIs and microservices using Spring Boot. Implemented security, authentication, and integrated with various databases and external services.",
       icon: "🍃",
       color: "from-green-600 to-lime-500"
     },
     {
       title: "Docker & K8s",
       description: "Containerization & Orchestration",
+      content: "Containerized applications with Docker and orchestrated them using Kubernetes. Managed scaling, load balancing, and service discovery in production environments.",
       icon: "🐳",
       color: "from-blue-600 to-indigo-500"
     },
     {
       title: "TypeScript",
       description: "Type-Safe Development",
+      content: "Leveraged TypeScript for building robust, maintainable codebases. Implemented advanced type systems and integrated with modern development workflows.",
       icon: "📘",
       color: "from-blue-700 to-purple-500"
     }
@@ -139,11 +145,11 @@ const Gallery3D = () => {
         {/* Section Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-blue-600 to-primary bg-clip-text text-transparent">
-            Interactive 3D Gallery
+            Gallery
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Explore my technical expertise through this interactive 3D showcase. 
-            Each cube represents a key area of my development skills.
+            Dive into my professional journey through these interactive showcases. 
+            Each piece represents real projects and achievements that define my expertise in modern software development.
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-blue-600 mx-auto rounded-full"></div>
         </div>
@@ -197,15 +203,14 @@ const Gallery3D = () => {
 
                   {/* Back Face */}
                   <div 
-                    className={`absolute inset-0 bg-gradient-to-tl ${item.color} rounded-2xl shadow-2xl flex flex-col items-center justify-center text-white p-6 border border-white/20`}
+                    className={`absolute inset-0 bg-gradient-to-tl ${item.color} rounded-2xl shadow-2xl flex flex-col items-center justify-center text-white p-4 border border-white/20`}
                     style={{
                       transform: 'translateZ(-50px) rotateY(180deg)',
                       backfaceVisibility: 'hidden'
                     }}
                   >
-                    <div className="text-3xl mb-4">✨</div>
-                    <h3 className="text-lg font-bold mb-2 text-center">Interactive</h3>
-                    <p className="text-sm text-center opacity-90">Hover to explore</p>
+                    <h3 className="text-lg font-bold mb-3 text-center">{item.title}</h3>
+                    <p className="text-xs text-center leading-relaxed opacity-95">{item.content}</p>
                   </div>
 
                   {/* Top Face */}
@@ -263,7 +268,7 @@ const Gallery3D = () => {
         <div className={`text-center mt-16 transition-all duration-1000 delay-500 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <p className="text-muted-foreground">
             <span className="inline-block animate-pulse mr-2">💡</span>
-            Hover over the cubes to see them transform in 3D space
+            Hover over the cubes to explore detailed project information and see them transform in 3D space
           </p>
         </div>
       </div>
