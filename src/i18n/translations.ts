@@ -2,12 +2,15 @@
 export const translations = {
   en: {
     nav: {
+      home: 'Home',
       about: 'About',
       experience: 'Experience',
       education: 'Education',
       skills: 'Skills',
       projects: 'Projects',
-      contact: 'Contact'
+      contact: 'Contact',
+      menu: 'Menu',
+      navigate: 'Navigate through the sections'
     },
     hero: {
       greeting: "Hello, I'm",
@@ -116,12 +119,15 @@ export const translations = {
   },
   fr: {
     nav: {
+      home: 'Accueil',
       about: 'À propos',
       experience: 'Expérience',
       education: 'Éducation',
       skills: 'Compétences',
       projects: 'Projets',
-      contact: 'Contact'
+      contact: 'Contact',
+      menu: 'Menu',
+      navigate: 'Naviguer à travers les sections'
     },
     hero: {
       greeting: 'Bonjour, je suis',
