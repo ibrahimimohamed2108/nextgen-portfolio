@@ -1,6 +1,9 @@
 
-import * as anime from 'animejs';
+import * as animeModule from 'animejs';
 import { TechCategory } from '@/types/techStack';
+
+// Get the default export from animejs
+const anime = animeModule.default;
 
 export const createPlanetAnimations = (techData: TechCategory[]) => {
   techData.forEach((category, index) => {
