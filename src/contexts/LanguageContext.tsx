@@ -31,18 +31,17 @@ const translations = {
     },
     experience: {
       title: 'Experience',
-      position: 'Information Systems Urbanization Intern',
-      company: 'Trésorerie Générale du Royaume',
+      position: 'Information System Urbanization Intern',
+      company: 'General Treasury of the Kingdom',
       duration: 'Summer Internship',
       location: 'Rabat, Morocco',
       description: "At the General Treasury of the Kingdom, I participated in the urbanization of the information system (IS). In this context, I contributed to the deployment, integration and demonstration of IT solutions.",
       missions: 'Key Achievements',
       mission1: 'Deployment and configuration of GLPI (ITSM), Mercator (SIEM & IS mapping) and OpenProject (agile project management) solutions.',
-      mission2: 'Implementation of a virtualized infrastructure to optimize system performance and resource management.',
-      mission3: 'MySQL database management including optimization, backup strategies, and performance tuning.',
-      mission4: 'Integration of centralized authentication with LDAP and Active Directory for enhanced security.',
-      mission5: 'Apache2, MySQL & PHP configurations for web application deployment and maintenance.',
-      mission6: 'Collaboration with multidisciplinary teams to ensure seamless system integration and user training.'
+      mission2: 'Implementation of a virtualized infrastructure.',
+      mission3: 'MySQL database management.',
+      mission4: 'Integration of centralized authentication with LDAP and Active Directory.',
+      mission5: 'Apache2, MySQL & PHP configurations.'
     },
     projects: {
       title: 'Technical Projects',
@@ -51,35 +50,35 @@ const translations = {
       viewProject: 'View Details',
       sourceCode: 'Source Code',
       cicd: {
-        title: 'CI/CD Pipeline Automation',
-        description: 'Automated deployment pipeline on AWS infrastructure',
+        title: 'CI/CD Pipeline Automation on AWS',
+        description: 'Automated deployment pipeline with Jenkins, Kubernetes and Terraform',
         details: 'Built a complete CI/CD pipeline using Jenkins for automation, Kubernetes for container orchestration, and Terraform for infrastructure as code on AWS cloud platform.'
       },
       ecommerce: {
         title: 'E-commerce Application',
-        description: 'Full-stack web application with modern frontend',
+        description: 'Full-stack web application with Angular and Firebase',
         details: 'Developed a responsive e-commerce platform using Angular for the frontend and Firebase for backend services, including real-time database and authentication.'
       },
       restaurant: {
         title: 'Restaurant Management System',
-        description: 'Desktop application for restaurant operations',
+        description: 'Desktop application for restaurant operations and ticket reservation in C',
         details: 'Created a comprehensive restaurant management and ticket reservation system in C programming language, featuring inventory management, order processing, and customer reservation handling.'
       }
     },
     education: {
       title: 'Education',
-      engineering: 'Engineering Degree',
-      'engineering.school': 'National School of Applied Sciences',
-      'engineering.period': '2022 - 2025',
-      'engineering.description': 'Currently pursuing an engineering degree with a focus on software development and data science.',
-      prep: 'Preparatory Classes for Engineering Schools',
-      'prep.school': 'CPGE Lycée Moulay Youssef',
-      'prep.period': '2020 - 2022',
-      'prep.description': 'Intensive two-year program focused on mathematics, physics, and engineering sciences to prepare for competitive entrance exams to top engineering schools.',
-      bac: 'Baccalaureate Degree in Physics and Chemistry',
-      'bac.school': 'Lycée Mohamed V',
-      'bac.period': '2019 - 2020',
-      'bac.description': 'High school diploma with a focus on physics and chemistry, providing a strong foundation in scientific principles and analytical thinking.',
+      engineering: 'State Engineer Degree, Computer Engineering and Digitalization',
+      'engineering.school': 'Mohammadia School of Engineers',
+      'engineering.period': '09/2023 - 06/2026',
+      'engineering.description': 'Currently pursuing an engineering degree with a focus on computer engineering and digitalization.',
+      prep: 'Mathematics and Physics',
+      'prep.school': 'CPGE - Preparatory Classes for Engineering Schools',
+      'prep.period': '09/2021 - 06/2023',
+      'prep.description': 'Intensive two-year program focused on mathematics and physics to prepare for competitive entrance exams to top engineering schools.',
+      bac: 'Baccalaureate, Mathematical Sciences A',
+      'bac.school': 'Mohammed VI High School',
+      'bac.period': '09/2020 - 06/2021',
+      'bac.description': 'High school diploma with a focus on mathematical sciences, providing a strong foundation in analytical thinking.',
       type: {
         engineering: 'Engineering School',
         preparatory: 'Preparatory Classes',
@@ -95,7 +94,8 @@ const translations = {
       description: 'Technical expertise and professional competencies.',
       technical: 'Technical Skills',
       professional: 'Professional Skills',
-      languages: 'Languages'
+      languages: 'Languages',
+      certifications: 'Certifications'
     },
     contact: {
       title: 'Contact',
@@ -151,11 +151,10 @@ const translations = {
       description: "Au sein de la Trésorerie Générale du Royaume, j'ai participé à l'urbanisation du système d'information (SI). Dans ce cadre, j'ai contribué au déploiement, à l'intégration et à la démonstration de solutions informatiques.",
       missions: 'Réalisations Clés',
       mission1: 'Déploiement et configuration des solutions GLPI (ITSM), Mercator (SIEM & cartographie SI) et OpenProject (gestion de projet agile).',
-      mission2: 'Mise en place d\'une infrastructure virtualisée pour optimiser les performances système et la gestion des ressources.',
-      mission3: 'Gestion des bases de données MySQL incluant l\'optimisation, les stratégies de sauvegarde et l\'ajustement des performances.',
-      mission4: 'Intégration de l\'authentification centralisée avec LDAP et Active Directory pour une sécurité renforcée.',
-      mission5: 'Configurations Apache2, MySQL & PHP pour le déploiement et la maintenance d\'applications web.',
-      mission6: 'Collaboration avec des équipes multidisciplinaires pour assurer une intégration système fluide et la formation des utilisateurs.'
+      mission2: 'Mise en place d\'une infrastructure virtualisée.',
+      mission3: 'Gestion des bases de données MySQL.',
+      mission4: 'Intégration de l\'authentification centralisée avec LDAP et Active Directory.',
+      mission5: 'Configurations Apache2, MySQL & PHP.'
     },
     projects: {
       title: 'Projets Techniques',
@@ -164,35 +163,35 @@ const translations = {
       viewProject: 'Voir Détails',
       sourceCode: 'Code Source',
       cicd: {
-        title: 'Automatisation Pipeline CI/CD',
-        description: 'Pipeline de déploiement automatisé sur infrastructure AWS',
+        title: 'Automatisation Pipeline CI/CD sur AWS',
+        description: 'Pipeline de déploiement automatisé avec Jenkins, Kubernetes et Terraform',
         details: 'Construction d\'un pipeline CI/CD complet utilisant Jenkins pour l\'automatisation, Kubernetes pour l\'orchestration de conteneurs, et Terraform pour l\'infrastructure en tant que code sur la plateforme cloud AWS.'
       },
       ecommerce: {
         title: 'Application E-commerce',
-        description: 'Application web full-stack avec frontend moderne',
+        description: 'Application web full-stack avec Angular et Firebase',
         details: 'Développement d\'une plateforme e-commerce responsive utilisant Angular pour le frontend et Firebase pour les services backend, incluant une base de données en temps réel et l\'authentification.'
       },
       restaurant: {
         title: 'Système de Gestion de Restaurant',
-        description: 'Application desktop pour les opérations de restaurant',
+        description: 'Application desktop pour les opérations de restaurant et réservation de tickets en C',
         details: 'Création d\'un système complet de gestion de restaurant et de réservation de tickets en langage C, avec gestion d\'inventaire, traitement des commandes et gestion des réservations clients.'
       }
     },
     education: {
       title: 'Éducation',
-      engineering: 'Diplôme d\'Ingénieur',
-      'engineering.school': 'École Nationale des Sciences Appliquées',
-      'engineering.period': '2022 - 2025',
-      'engineering.description': 'Poursuit actuellement un diplôme d\'ingénieur avec une spécialisation en développement logiciel et science des données.',
-      prep: 'Classes Préparatoires aux Grandes Écoles d\'Ingénieurs',
-      'prep.school': 'CPGE Lycée Moulay Youssef',
-      'prep.period': '2020 - 2022',
-      'prep.description': 'Programme intensif de deux ans axé sur les mathématiques, la physique et les sciences de l\'ingénieur pour préparer aux concours d\'entrée aux grandes écoles d\'ingénieurs.',
-      bac: 'Baccalauréat en Physique-Chimie',
-      'bac.school': 'Lycée Mohamed V',
-      'bac.period': '2019 - 2020',
-      'bac.description': 'Diplôme de fin d\'études secondaires avec une spécialisation en physique-chimie, fournissant une base solide en principes scientifiques et en pensée analytique.',
+      engineering: 'Diplôme d\'Ingénieur d\'État, Génie Informatique et Digitalisation',
+      'engineering.school': 'École Mohammadia d\'Ingénieurs',
+      'engineering.period': '09/2023 - 06/2026',
+      'engineering.description': 'Poursuit actuellement un diplôme d\'ingénieur avec une spécialisation en génie informatique et digitalisation.',
+      prep: 'Mathématiques et Physique',
+      'prep.school': 'CPGE - Classes Préparatoires aux Grandes Écoles',
+      'prep.period': '09/2021 - 06/2023',
+      'prep.description': 'Programme intensif de deux ans axé sur les mathématiques et la physique pour préparer aux concours d\'entrée aux grandes écoles d\'ingénieurs.',
+      bac: 'Baccalauréat, Sciences Mathématiques A',
+      'bac.school': 'Lycée Mohammed VI',
+      'bac.period': '09/2020 - 06/2021',
+      'bac.description': 'Diplôme de fin d\'études secondaires avec une spécialisation en sciences mathématiques, fournissant une base solide en pensée analytique.',
       type: {
         engineering: 'École d\'Ingénieur',
         preparatory: 'Classes Préparatoires',
@@ -208,7 +207,8 @@ const translations = {
       description: 'Expertise technique et compétences professionnelles.',
       technical: 'Compétences Techniques',
       professional: 'Compétences Professionnelles',
-      languages: 'Langues'
+      languages: 'Langues',
+      certifications: 'Certifications'
     },
     contact: {
       title: 'Contact',
