@@ -1,109 +1,108 @@
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Github, Linkedin, Mail, Code, Cloud, Database } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Download, Mail, Github, Linkedin, ChevronDown } from "lucide-react";
+import { useInView } from "@/hooks/useInView";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Hero = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [currentRole, setCurrentRole] = useState(0);
-  
-  const roles = [
-    "Software Engineer",
-    "DevOps Enthusiast", 
-    "Cloud Computing Specialist",
-    "System Architect"
-  ];
+  const { ref, isInView } = useInView({ threshold: 0.3 });
+  const { t } = useLanguage();
 
-  useEffect(() => {
-    setIsVisible(true);
-    const interval = setInterval(() => {
-      setCurrentRole((prev) => (prev + 1) % roles.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <section id="about" className="min-h-screen pt-24 pb-16 bg-gradient-to-br from-background via-muted/30 to-background relative overflow-hidden">
-      {/* Animated background elements */}
+    <section id="about" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-background via-background to-primary/5" ref={ref}>
+      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-green-500/3 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-60 h-60 bg-gradient-to-r from-primary/5 to-blue-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '4s' }}></div>
       </div>
 
-      {/* Floating icons */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <Code className="absolute top-1/4 left-1/4 w-6 h-6 text-primary/20 animate-bounce delay-300" />
-        <Cloud className="absolute top-1/3 right-1/4 w-5 h-5 text-blue-500/20 animate-bounce delay-700" />
-        <Database className="absolute bottom-1/3 left-1/3 w-4 h-4 text-green-500/20 animate-bounce delay-1000" />
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-          <div className={`flex-shrink-0 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="relative group">
-              <Avatar className="w-48 h-48 lg:w-64 lg:h-64 ring-4 ring-primary/10 transition-all duration-300 group-hover:ring-primary/30 group-hover:scale-105">
-                <AvatarImage 
-                  src="https://media.licdn.com/dms/image/v2/D4D03AQHF0N9FWLh_UA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1672424593087?e=1755734400&v=beta&t=k5GPitXqeM6C9n57L-hqqajOyYsHUx-_yExf1Q6ZX5o" 
-                  alt="Mohamed IBRAHIMI"
-                />
-                <AvatarFallback>MI</AvatarFallback>
-              </Avatar>
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+      <div className="container mx-auto px-4 py-20 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+          {/* Profile Image */}
+          <div className={`relative group transition-all duration-1000 ${isInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary to-blue-600 rounded-full blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+              <img 
+                src="https://media.licdn.com/dms/image/v2/D4D03AQHF0N9FWLh_UA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1672424593087?e=1755734400&v=beta&t=k5GPitXqeM6C9n57L-hqqajOyKsHUx-_yExf1Q6ZX5o"
+                alt="Mohamed IBRAHIMI"
+                className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-full object-cover border-4 border-background shadow-2xl group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/20 to-transparent group-hover:from-primary/30 transition-all duration-500"></div>
             </div>
           </div>
-          
-          <div className={`flex-1 text-center lg:text-left transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <h1 className="text-4xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-primary via-blue-600 to-green-600 bg-clip-text text-transparent">
-              Mohamed IBRAHIMI
-            </h1>
-            
-            <div className="h-16 mb-6">
-              <h2 className="text-xl lg:text-2xl text-muted-foreground mb-2">
-                Génie Informatique - École Mohammadia d'Ingénieurs
-              </h2>
-              <div className="text-lg lg:text-xl font-medium text-primary/80 transition-all duration-500">
-                {roles[currentRole]}
+
+          {/* Content */}
+          <div className={`flex-1 text-center lg:text-left transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className="space-y-6">
+              <div>
+                <p className="text-lg text-muted-foreground mb-2 animate-fade-in">
+                  {t('hero.greeting')}
+                </p>
+                <h1 className="text-4xl lg:text-6xl font-bold mb-4">
+                  <span className="bg-gradient-to-r from-primary via-blue-600 to-primary bg-clip-text text-transparent">
+                    Mohamed IBRAHIMI
+                  </span>
+                </h1>
+                <h2 className="text-2xl lg:text-3xl font-semibold text-muted-foreground mb-2">
+                  {t('hero.title')}
+                </h2>
+                <p className="text-xl text-primary font-medium">
+                  {t('hero.subtitle')}
+                </p>
               </div>
-            </div>
-            
-            <p className="text-lg mb-8 max-w-3xl leading-relaxed text-muted-foreground">
-              Élève ingénieur en informatique passionné par le développement logiciel et le cloud computing, 
-              je me spécialise dans les pratiques DevOps, l'automatisation des pipelines CI/CD et les technologies cloud. 
-              J'ai conçu et mis en œuvre un pipeline CI/CD entièrement automatisé sur AWS, intégrant Jenkins, 
-              Kubernetes et Terraform (Infrastructure as Code), afin d'assurer des déploiements fiables, 
-              reproductibles et sécurisés.
-            </p>
-            
-            <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-              <Button asChild className="group hover:scale-105 transition-all duration-300 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90">
-                <a href="mailto:ibrahimimohamed2108@gmail.com">
-                  <Mail className="mr-2 h-4 w-4 group-hover:animate-bounce" />
-                  Contact Me
-                </a>
-              </Button>
-              <Button variant="outline" asChild className="group hover:scale-105 transition-all duration-300 border-primary/20 hover:border-primary/40">
-                <a href="https://www.linkedin.com/in/ibrahimimohamed" target="_blank" rel="noopener noreferrer">
-                  <Linkedin className="mr-2 h-4 w-4 group-hover:text-blue-600 transition-colors" />
-                  LinkedIn
-                </a>
-              </Button>
-              <Button variant="outline" asChild className="group hover:scale-105 transition-all duration-300 border-primary/20 hover:border-primary/40">
-                <a href="https://github.com/ibrahimimohamed2108" target="_blank" rel="noopener noreferrer">
-                  <Github className="mr-2 h-4 w-4 group-hover:text-gray-800 dark:group-hover:text-white transition-colors" />
-                  GitHub
-                </a>
-              </Button>
+
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                {t('hero.description')}
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button 
+                  size="lg" 
+                  className="group bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
+                  {t('hero.downloadCV')}
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  onClick={() => scrollToSection('contact')}
+                  className="group border-primary/20 hover:border-primary hover:bg-primary/5 transition-all duration-300"
+                >
+                  <Mail className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                  {t('hero.contactMe')}
+                </Button>
+              </div>
+
+              {/* Social Links */}
+              <div className="flex gap-4 justify-center lg:justify-start">
+                <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:scale-110 transition-all duration-300">
+                  <Github className="h-5 w-5" />
+                </Button>
+                <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:scale-110 transition-all duration-300">
+                  <Linkedin className="h-5 w-5" />
+                </Button>
+                <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:scale-110 transition-all duration-300">
+                  <Mail className="h-5 w-5" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-primary/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-primary/60 rounded-full mt-2 animate-pulse"></div>
-          </div>
+          <ChevronDown 
+            className="h-6 w-6 text-muted-foreground cursor-pointer hover:text-primary transition-colors"
+            onClick={() => scrollToSection('experience')}
+          />
         </div>
       </div>
     </section>
