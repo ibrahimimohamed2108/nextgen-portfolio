@@ -59,10 +59,7 @@ const Portfolio3D = () => {
     <div className="relative min-h-screen">
       <ParticleBackground />
       
-      <Header 
-        currentSection={currentSection}
-        onSectionChange={scrollToSection}
-      />
+      <Header />
 
       <main className="relative z-10">
         {sections.map((Section, index) => (

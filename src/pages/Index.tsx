@@ -1,5 +1,5 @@
 
-import { Portfolio3D } from "@/components/Portfolio3D";
+import Portfolio3D from "@/components/Portfolio3D";
 
 const Index = () => {
   return (
