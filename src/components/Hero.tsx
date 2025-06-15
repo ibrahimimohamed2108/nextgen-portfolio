@@ -39,16 +39,28 @@ const Hero = () => {
 
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-          {/* Profile Image */}
+          {/* Modern Professional Profile Image */}
           <div className={`relative group transition-all duration-1000 ${isInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary to-blue-600 rounded-full blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
-              <img 
-                src="/lovable-uploads/03afd6d9-cfb1-458d-9190-2d0547094144.png"
-                alt="Mohamed IBRAHIMI"
-                className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-full object-cover border-4 border-background shadow-2xl group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/20 to-transparent group-hover:from-primary/30 transition-all duration-500"></div>
+              {/* Modern geometric frame */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-blue-500/10 to-primary/20 rounded-2xl transform rotate-6 group-hover:rotate-12 transition-transform duration-700"></div>
+              <div className="absolute inset-0 bg-gradient-to-bl from-blue-500/20 via-primary/10 to-blue-500/20 rounded-2xl transform -rotate-6 group-hover:-rotate-12 transition-transform duration-700"></div>
+              
+              {/* Clean professional image container */}
+              <div className="relative bg-white dark:bg-gray-900 p-3 rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-500">
+                <img 
+                  src="/lovable-uploads/03afd6d9-cfb1-458d-9190-2d0547094144.png"
+                  alt="Mohamed IBRAHIMI"
+                  className="relative w-72 h-72 lg:w-80 lg:h-80 rounded-xl object-cover grayscale-0 group-hover:scale-105 transition-all duration-500"
+                />
+                
+                {/* Subtle overlay for depth */}
+                <div className="absolute inset-3 rounded-xl bg-gradient-to-tr from-transparent via-transparent to-primary/5 group-hover:to-primary/10 transition-all duration-500"></div>
+              </div>
+              
+              {/* Modern accent elements */}
+              <div className="absolute -top-4 -right-4 w-8 h-8 bg-primary rounded-full opacity-80 group-hover:scale-125 transition-transform duration-300"></div>
+              <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-blue-500 rounded-full opacity-60 group-hover:scale-125 transition-transform duration-300" style={{ animationDelay: '0.1s' }}></div>
             </div>
           </div>
 
