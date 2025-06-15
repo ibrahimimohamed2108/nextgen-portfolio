@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
-import anime from 'animejs';
+import * as anime from 'animejs';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Code, Server, Cloud, Wrench, Lightbulb, Monitor } from 'lucide-react';
 
