@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -134,7 +133,7 @@ const StoryChapter = ({
   onInView: () => void;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { threshold: 0.5 });
+  const inView = useInView(ref, { amount: 0.5 });
 
   useEffect(() => {
     if (inView) {
