@@ -15,14 +15,118 @@ const Hero = () => {
   };
 
   const downloadCV = () => {
-    // Create different CV versions based on language
-    const cvUrl = language === 'fr' ? '/cv-mohamed-ibrahimi-fr.pdf' : '/cv-mohamed-ibrahimi-en.pdf';
+    const cvContent = `# 👨‍💻 Mohamed Ibrahimi  
+**Engineering Student | Software Development | Cloud & DevOps Enthusiast**  
+📍 Morocco | 🎓 École Mohammadia d'Ingénieurs  
+📧 ibrahimimoahamed2108@gmail.com  
+🔗 [LinkedIn](https://linkedin.com/in/ibrahimimohamed) · [GitHub](https://github.com/ibrahimimohamed2108)
+
+---
+
+## 🧭 Summary
+
+Driven and passionate engineering student currently in the **2nd year of Software & Digitalization Engineering** at EMI.  
+Strong expertise in **software development**, **cloud computing**, and **DevOps** practices including CI/CD, containerization, infrastructure as code (IaC), and automation.  
+Currently working on an **automated CI/CD pipeline** on AWS using Jenkins, Kubernetes, and Terraform.
+
+Actively seeking a **2-month internship (PFA)** for **July–August 2025** to apply my skills in real-world projects and deepen my professional experience.
+
+---
+
+## 💼 Experience
+
+### 🏛️ Trésorerie Générale du Royaume — *Intern, IT Urbanization*  
+📍 Rabat, Morocco | 🗓️ Feb 2025  
+> Participated in the modernization of the Information System (SI) by deploying and demonstrating key IT solutions.
+
+**Key Contributions:**
+- 🚀 Deployed & configured **GLPI**, **Mercator**, and **OpenProject**
+- 🧰 Set up a **virtualized infrastructure**
+- 🗃️ Managed **MySQL databases**
+- 🔐 Integrated **LDAP** with **Active Directory** for centralized authentication
+- ⚙️ Configured **Apache2**, **MySQL**, and **PHP**
+
+---
+
+## 🎓 Education
+
+| Degree | Institution | Period |
+|--------|-------------|--------|
+| 🎓 **Engineer's Degree – Computer Science & Digitalization** | École Mohammadia d'Ingénieurs | *2023 – 2026* |
+| 📘 **Classes Préparatoires – Mathematics & Physics** | CPGE (Grandes Écoles Prep) | *2021 – 2023* |
+| 🎓 **Baccalaureate – Mathematics A** | Lycée Mohammed VI, Oujda | *2020 – 2021* |
+
+---
+
+## 🛠️ Skills
+
+**Languages & Frameworks**  
+\`Java\` · \`Spring Boot\` · \`JavaFX\` · \`React\` · \`TypeScript\` · \`Python\` · \`C/C++\`
+
+**DevOps & Cloud**  
+\`AWS\` · \`Docker\` · \`Kubernetes\` · \`Terraform\` · \`Git\` · \`GitHub\` · \`CI/CD\` · \`Infrastructure as Code\` · \`Automation\`
+
+**Databases & Tools**  
+\`MySQL\` · \`OpenProject\` · \`GLPI\` · \`LDAP\` · \`Apache2\`
+
+**Soft Skills & Methodologies**  
+\`Agile\` · \`Scrum\` · \`Sprint Planning\` · \`Software Design Patterns\`
+
+---
+
+## 📂 Projects
+
+### 🔧 [Automated CI/CD Pipeline on AWS](https://github.com/ibrahimimohamed2108/erp-clone)
+> Built a full CI/CD pipeline using Jenkins, Kubernetes & Terraform with AWS ECR/EKS integration.
+
+### 🛍️ [E-commerce App (Angular + Firebase)](https://github.com/ibrahimimohamed2108/angEcom1)
+> Developed a functional e-commerce app with authentication, product browsing, and cart functionality.
+
+### 🍽️ [Restaurant Management System in C](https://github.com/ibrahimimohamed2108/ProjetRestau_C)
+> Console-based ticketing and restaurant reservation system.
+
+---
+
+## 📜 Certifications
+
+- 🧠 **AWS Cloud Practitioner** — *DataCamp*
+- ☁️ **Introduction to Cloud Computing** — *IBM*
+- 🐳 **Containers: Docker, Kubernetes & OpenShift** — *IBM*
+- 🔁 **CI/CD & DevOps Automation** — *IBM*
+- 🧰 **Git & GitHub** — *IBM*
+- 📡 **Computer Networks** — *Huawei*
+- 👨‍🏫 **Agile & Scrum Fundamentals** — *IBM*
+- 🔐 **Cybersecurity Tools & Attacks** — *IBM*
+- ☕ **Java Programming I & II** — *University of Helsinki*
+
+---
+
+## 📬 Contact
+
+| Platform | Link |
+|----------|------|
+| 📧 Email | [ibrahimimoahamed2108@gmail.com](mailto:ibrahimimoahamed2108@gmail.com) |
+| 🔗 LinkedIn | [linkedin.com/in/ibrahimimohamed](https://linkedin.com/in/ibrahimimohamed) |
+| 💻 GitHub | [github.com/ibrahimimohamed2108](https://github.com/ibrahimimohamed2108) |
+
+---
+
+> 🔍 *Available for collaboration, internships, and innovative tech projects.*`;
+
+    // Create a blob with the CV content
+    const blob = new Blob([cvContent], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    
+    // Create a temporary link and trigger download
     const link = document.createElement('a');
-    link.href = cvUrl;
-    link.download = `Mohamed_IBRAHIMI_CV_${language.toUpperCase()}.pdf`;
+    link.href = url;
+    link.download = `Mohamed_IBRAHIMI_CV_${language.toUpperCase()}.md`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    // Clean up the URL
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -115,7 +219,7 @@ const Hero = () => {
                   size="icon" 
                   variant="ghost" 
                   className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
-                  onClick={() => window.open('https://github.com/mohamedibrahimi', '_blank')}
+                  onClick={() => window.open('https://github.com/ibrahimimohamed2108', '_blank')}
                 >
                   <Github className="h-5 w-5" />
                 </Button>
@@ -123,7 +227,7 @@ const Hero = () => {
                   size="icon" 
                   variant="ghost" 
                   className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
-                  onClick={() => window.open('https://linkedin.com/in/mohamedibrahimi', '_blank')}
+                  onClick={() => window.open('https://www.linkedin.com/in/ibrahimimohamed', '_blank')}
                 >
                   <Linkedin className="h-5 w-5" />
                 </Button>

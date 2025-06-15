@@ -60,24 +60,37 @@ const Contact = () => {
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             {contactMethods.map((method, index) => {
               const IconComponent = method.icon;
-              const CardComponent = method.href ? 'a' : 'div';
               
               return (
                 <Card 
                   key={method.label}
                   className={`group hover:shadow-xl transition-all duration-500 border-0 overflow-hidden ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
                   style={{ transitionDelay: `${index * 150}ms` }}
-                  asChild={!!method.href}
                 >
-                  <CardComponent
-                    {...(method.href && {
-                      href: method.href,
-                      target: method.href.startsWith('http') ? '_blank' : undefined,
-                      rel: method.href.startsWith('http') ? 'noopener noreferrer' : undefined,
-                      className: "block cursor-pointer"
-                    })}
-                  >
-                    <CardContent className="p-6">
+                  <CardContent className="p-6">
+                    {method.href ? (
+                      <a
+                        href={method.href}
+                        target={method.href.startsWith('http') ? '_blank' : undefined}
+                        rel={method.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        className="block cursor-pointer"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className={`p-3 rounded-lg bg-gradient-to-br ${method.color} group-hover:scale-110 transition-transform duration-300`}>
+                            <IconComponent className="h-6 w-6 text-white" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
+                              {method.label}
+                            </h3>
+                            <p className="text-xs text-muted-foreground mb-2">{method.description}</p>
+                            <p className="text-sm text-muted-foreground break-all">
+                              {method.value}
+                            </p>
+                          </div>
+                        </div>
+                      </a>
+                    ) : (
                       <div className="flex items-start gap-4">
                         <div className={`p-3 rounded-lg bg-gradient-to-br ${method.color} group-hover:scale-110 transition-transform duration-300`}>
                           <IconComponent className="h-6 w-6 text-white" />
@@ -92,8 +105,8 @@ const Contact = () => {
                           </p>
                         </div>
                       </div>
-                    </CardContent>
-                  </CardComponent>
+                    )}
+                  </CardContent>
                 </Card>
               );
             })}
