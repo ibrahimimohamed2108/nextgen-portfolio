@@ -6,7 +6,7 @@ const HeroScrollIndicator = () => {
   const { toast } = useToast();
 
   const scrollToSection = (sectionId: string) => {
-    console.log(`Attempting to scroll to section: ${sectionId} - Debug log`);
+    console.log(`Attempting to scroll to section: ${sectionId}`);
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -26,9 +26,9 @@ const HeroScrollIndicator = () => {
   };
 
   return (
-    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce pointer-events-auto">
+    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
       <ChevronDown 
-        className="h-6 w-6 text-muted-foreground cursor-pointer hover:text-primary transition-colors relative z-50 pointer-events-auto"
+        className="h-6 w-6 text-muted-foreground cursor-pointer hover:text-primary transition-colors relative z-50"
         onClick={() => scrollToSection('experience')}
       />
     </div>

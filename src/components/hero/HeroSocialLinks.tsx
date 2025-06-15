@@ -7,7 +7,7 @@ const HeroSocialLinks = () => {
   const { toast } = useToast();
 
   const handleGitHubClick = () => {
-    console.log('GitHub icon clicked - Debug log');
+    console.log('GitHub icon clicked');
     try {
       window.open('https://github.com/ibrahimimohamed2108', '_blank', 'noopener,noreferrer');
       toast({
@@ -26,7 +26,7 @@ const HeroSocialLinks = () => {
   };
 
   const handleLinkedInClick = () => {
-    console.log('LinkedIn icon clicked - Debug log');
+    console.log('LinkedIn icon clicked');
     try {
       window.open('https://www.linkedin.com/in/ibrahimimohamed', '_blank', 'noopener,noreferrer');
       toast({
@@ -45,7 +45,7 @@ const HeroSocialLinks = () => {
   };
 
   const handleEmailClick = () => {
-    console.log('Email icon clicked - Debug log');
+    console.log('Email icon clicked');
     try {
       window.location.href = 'mailto:ibrahimimoahamed2108@gmail.com';
       toast({
@@ -71,11 +71,11 @@ const HeroSocialLinks = () => {
   };
 
   return (
-    <div className="flex gap-4 justify-center lg:justify-start pointer-events-auto">
+    <div className="flex gap-4 justify-center lg:justify-start">
       <Button 
         size="icon" 
         variant="ghost" 
-        className="hover:bg-primary/10 hover:scale-110 transition-all duration-300 relative z-50 cursor-pointer pointer-events-auto"
+        className="hover:bg-primary/10 hover:scale-110 transition-all duration-300 relative z-50 cursor-pointer"
         onClick={handleGitHubClick}
         aria-label="Visit GitHub Profile"
         type="button"
@@ -85,7 +85,7 @@ const HeroSocialLinks = () => {
       <Button 
         size="icon" 
         variant="ghost" 
-        className="hover:bg-primary/10 hover:scale-110 transition-all duration-300 relative z-50 cursor-pointer pointer-events-auto"
+        className="hover:bg-primary/10 hover:scale-110 transition-all duration-300 relative z-50 cursor-pointer"
         onClick={handleLinkedInClick}
         aria-label="Visit LinkedIn Profile"
         type="button"
@@ -95,7 +95,7 @@ const HeroSocialLinks = () => {
       <Button 
         size="icon" 
         variant="ghost" 
-        className="hover:bg-primary/10 hover:scale-110 transition-all duration-300 relative z-50 cursor-pointer pointer-events-auto"
+        className="hover:bg-primary/10 hover:scale-110 transition-all duration-300 relative z-50 cursor-pointer"
         onClick={handleEmailClick}
         aria-label="Send Email"
         type="button"
