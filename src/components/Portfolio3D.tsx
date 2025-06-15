@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Scene3D } from './3d/Scene3D';
@@ -15,6 +14,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Eye, Layers3, MousePointer2, Sparkles, AlertCircle, Settings, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { ModernScene3D } from './3d/ModernScene3D';
 
 export const Portfolio3D = () => {
   const [view3D, setView3D] = useState(false);
@@ -138,8 +138,8 @@ export const Portfolio3D = () => {
             {webglError 
               ? (t('3d.unavailable') || '3D Unavailable')
               : view3D 
-              ? (t('3d.exit') || 'Exit 3D') 
-              : (t('3d.enter') || 'Enter 3D')
+              ? (t('3d.exit') || 'Exit Advanced 3D') 
+              : (t('3d.enter') || 'Enter Advanced 3D')
             }
           </span>
         </motion.button>
@@ -199,14 +199,14 @@ export const Portfolio3D = () => {
           </motion.div>
         ) : view3D && !webglError ? (
           <motion.div
-            key="3d"
+            key="modern-3d"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
             className="h-screen"
           >
-            <Scene3D 
+            <ModernScene3D 
               currentSection={currentSection} 
               onSectionChange={setCurrentSection}
               onWebGLError={handleWebGLError}
