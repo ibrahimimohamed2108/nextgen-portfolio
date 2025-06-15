@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
@@ -41,27 +42,28 @@ const translations = {
       mission2: 'Implementation of a virtualized infrastructure.',
       mission3: 'MySQL database management.',
       mission4: 'Integration of centralized authentication with LDAP and Active Directory.',
-      mission5: 'Apache2, MySQL & PHP configurations.'
+      mission5: 'Apache2, MySQL & PHP configurations.',
+      mission6: 'System performance monitoring and optimization.'
     },
     projects: {
-      title: 'Technical Projects',
+      title: 'Projects',
       description: 'A showcase of innovative solutions and technical implementations.',
       technologies: 'Technologies Used',
       viewProject: 'View Details',
       sourceCode: 'Source Code',
       cicd: {
-        title: 'CI/CD Pipeline Automation on AWS',
-        description: 'Automated deployment pipeline with Jenkins, Kubernetes and Terraform',
+        title: 'Automated CI/CD Pipeline on AWS',
+        description: 'Automated a CI/CD pipeline on AWS using Jenkins, Kubernetes, and Terraform',
         details: 'Built a complete CI/CD pipeline using Jenkins for automation, Kubernetes for container orchestration, and Terraform for infrastructure as code on AWS cloud platform.'
       },
       ecommerce: {
         title: 'E-commerce Application',
-        description: 'Full-stack web application with Angular and Firebase',
+        description: 'Developed an e-commerce application using Angular and Firebase',
         details: 'Developed a responsive e-commerce platform using Angular for the frontend and Firebase for backend services, including real-time database and authentication.'
       },
       restaurant: {
         title: 'Restaurant Management System',
-        description: 'Desktop application for restaurant operations and ticket reservation in C',
+        description: 'Built a restaurant management and ticket reservation system in C',
         details: 'Created a comprehensive restaurant management and ticket reservation system in C programming language, featuring inventory management, order processing, and customer reservation handling.'
       }
     },
@@ -154,27 +156,28 @@ const translations = {
       mission2: 'Mise en place d\'une infrastructure virtualisée.',
       mission3: 'Gestion des bases de données MySQL.',
       mission4: 'Intégration de l\'authentification centralisée avec LDAP et Active Directory.',
-      mission5: 'Configurations Apache2, MySQL & PHP.'
+      mission5: 'Configurations Apache2, MySQL & PHP.',
+      mission6: 'Surveillance et optimisation des performances du système.'
     },
     projects: {
-      title: 'Projets Techniques',
+      title: 'Projets',
       description: 'Une vitrine de solutions innovantes et d\'implémentations techniques.',
       technologies: 'Technologies Utilisées',
       viewProject: 'Voir Détails',
       sourceCode: 'Code Source',
       cicd: {
-        title: 'Automatisation Pipeline CI/CD sur AWS',
-        description: 'Pipeline de déploiement automatisé avec Jenkins, Kubernetes et Terraform',
+        title: 'Pipeline CI/CD Automatisé sur AWS',
+        description: 'Automatisation d\'un pipeline CI/CD sur AWS avec Jenkins, Kubernetes et Terraform',
         details: 'Construction d\'un pipeline CI/CD complet utilisant Jenkins pour l\'automatisation, Kubernetes pour l\'orchestration de conteneurs, et Terraform pour l\'infrastructure en tant que code sur la plateforme cloud AWS.'
       },
       ecommerce: {
         title: 'Application E-commerce',
-        description: 'Application web full-stack avec Angular et Firebase',
+        description: 'Développement d\'une application e-commerce avec Angular et Firebase',
         details: 'Développement d\'une plateforme e-commerce responsive utilisant Angular pour le frontend et Firebase pour les services backend, incluant une base de données en temps réel et l\'authentification.'
       },
       restaurant: {
         title: 'Système de Gestion de Restaurant',
-        description: 'Application desktop pour les opérations de restaurant et réservation de tickets en C',
+        description: 'Construction d\'un système de gestion de restaurant et de réservation de tickets en C',
         details: 'Création d\'un système complet de gestion de restaurant et de réservation de tickets en langage C, avec gestion d\'inventaire, traitement des commandes et gestion des réservations clients.'
       }
     },

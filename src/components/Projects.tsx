@@ -1,7 +1,7 @@
 
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Code, Cloud, ShoppingCart, Utensils, ExternalLink, Github } from "lucide-react";
+import { Cloud, ShoppingCart, Utensils, ExternalLink, Github } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
 import { useLanguage } from "@/contexts/LanguageContext";
 
