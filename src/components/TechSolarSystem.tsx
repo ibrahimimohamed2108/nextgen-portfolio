@@ -32,9 +32,9 @@ const TechSolarSystem = () => {
 
   const solarSystemVariants = {
     hidden: { 
-      scale: 0.8, 
+      scale: 0.85, 
       opacity: 0,
-      rotateY: -30
+      rotateY: -20
     },
     visible: {
       scale: 1,
@@ -42,11 +42,11 @@ const TechSolarSystem = () => {
       rotateY: 0,
       transition: {
         type: "spring",
-        damping: 20,
-        stiffness: 80,
-        duration: 1.2,
-        staggerChildren: 0.15,
-        delayChildren: 0.3
+        damping: 25,
+        stiffness: 90,
+        duration: 1.5,
+        staggerChildren: 0.12,
+        delayChildren: 0.4
       }
     }
   };
@@ -72,7 +72,7 @@ const TechSolarSystem = () => {
           </h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Explore my technical universe where each planet represents a technology domain, 
-            and moons orbit with the tools and frameworks within each category.
+            scattered beautifully across the cosmic landscape with their orbiting tools and frameworks.
           </p>
         </motion.div>
 
@@ -83,7 +83,7 @@ const TechSolarSystem = () => {
             style={{ 
               width: '1200px', 
               height: '1200px',
-              perspective: '1000px'
+              perspective: '1200px'
             }}
             variants={solarSystemVariants}
             initial="hidden"
@@ -91,7 +91,7 @@ const TechSolarSystem = () => {
           >
             <CentralSun />
 
-            {/* Planets with proper orbital mechanics */}
+            {/* Planets with uniform distribution around the sun */}
             {techData.map((category, planetIndex) => (
               <TechPlanet
                 key={category.name}
@@ -105,7 +105,7 @@ const TechSolarSystem = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.8, delay: 1 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
         >
           <TechLegend techData={techData} />
         </motion.div>
