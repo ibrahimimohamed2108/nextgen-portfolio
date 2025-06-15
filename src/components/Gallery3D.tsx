@@ -1,3 +1,4 @@
+
 import { useEffect, useRef } from 'react';
 import { useInView } from '@/hooks/useInView';
 
@@ -12,6 +13,7 @@ const Gallery3D = () => {
   const cubeRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
+  const floatingAnimationRef = useRef<any>(null);
 
   const galleryItems = [
     {
@@ -68,6 +70,9 @@ const Gallery3D = () => {
       if (animationRef.current) {
         animationRef.current.pause();
       }
+      if (floatingAnimationRef.current) {
+        floatingAnimationRef.current.pause();
+      }
       document.head.removeChild(script);
     };
   }, []);
@@ -81,62 +86,100 @@ const Gallery3D = () => {
   const initializeAnimations = () => {
     if (!window.anime || !containerRef.current) return;
 
-    // Initial entrance animation
+    const validCubes = cubeRefs.current.filter(Boolean);
+    
+    // Clear any existing animations
+    if (animationRef.current) animationRef.current.pause();
+    if (floatingAnimationRef.current) floatingAnimationRef.current.pause();
+
+    // Reset all cubes to initial state
+    window.anime.set(validCubes, {
+      scale: 0,
+      rotateY: -90,
+      rotateX: 45,
+      translateZ: 100,
+      opacity: 0
+    });
+
+    // Staggered entrance animation
     window.anime({
-      targets: cubeRefs.current.filter(Boolean),
+      targets: validCubes,
       scale: [0, 1],
       rotateY: [-90, 0],
       rotateX: [45, 0],
       translateZ: [100, 0],
       opacity: [0, 1],
-      delay: window.anime.stagger(200),
-      duration: 1000,
-      easing: 'easeOutExpo'
+      delay: window.anime.stagger(150, { start: 300 }),
+      duration: 800,
+      easing: 'easeOutExpo',
+      complete: () => {
+        startFloatingAnimation();
+      }
     });
+  };
 
-    // Continuous floating animation
-    animationRef.current = window.anime({
-      targets: cubeRefs.current.filter(Boolean),
-      rotateY: '+=360',
-      rotateX: [-5, 5, -5],
-      translateY: [-10, 10, -10],
-      duration: 4000,
+  const startFloatingAnimation = () => {
+    if (!window.anime) return;
+    
+    const validCubes = cubeRefs.current.filter(Boolean);
+    
+    // Continuous gentle floating animation
+    floatingAnimationRef.current = window.anime({
+      targets: validCubes,
+      rotateY: [0, 10, 0, -10, 0],
+      rotateX: [0, 5, 0, -5, 0],
+      translateY: [0, -8, 0, 8, 0],
+      translateZ: [0, 5, 0, -5, 0],
+      duration: 6000,
       loop: true,
-      direction: 'alternate',
       easing: 'easeInOutSine',
-      delay: window.anime.stagger(300)
+      delay: window.anime.stagger(800)
     });
   };
 
   const handleCubeHover = (index: number, isHover: boolean) => {
     if (!window.anime || !cubeRefs.current[index]) return;
 
-    window.anime({
-      targets: cubeRefs.current[index],
-      scale: isHover ? 1.1 : 1,
-      rotateX: isHover ? 15 : 0,
-      rotateY: isHover ? 15 : 0,
-      translateZ: isHover ? 30 : 0,
-      duration: 300,
-      easing: 'easeOutQuad'
-    });
+    // Pause floating animation temporarily for this cube
+    if (isHover && floatingAnimationRef.current) {
+      window.anime({
+        targets: cubeRefs.current[index],
+        scale: 1.15,
+        rotateX: 20,
+        rotateY: 20,
+        translateZ: 40,
+        duration: 400,
+        easing: 'easeOutQuart'
+      });
+    } else {
+      window.anime({
+        targets: cubeRefs.current[index],
+        scale: 1,
+        rotateX: 0,
+        rotateY: 0,
+        translateZ: 0,
+        duration: 400,
+        easing: 'easeOutQuart'
+      });
+    }
   };
 
   return (
     <section 
       id="gallery3d" 
-      className="py-20 bg-gradient-to-br from-background via-muted/20 to-background relative overflow-hidden"
+      className="py-24 bg-gradient-to-br from-background via-muted/10 to-background relative overflow-hidden"
       ref={ref}
     >
-      {/* Background Elements */}
+      {/* Enhanced Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/3 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/3 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-primary/2 to-blue-500/2 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '4s' }}></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header - Updated Title */}
-        <div className={`text-center mb-16 transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        {/* Section Header */}
+        <div className={`text-center mb-20 transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-blue-600 to-primary bg-clip-text text-transparent">
             Gallery
           </h2>
@@ -152,12 +195,12 @@ const Gallery3D = () => {
           ref={containerRef}
           className="relative"
           style={{
-            perspective: '1000px',
+            perspective: '1200px',
             perspectiveOrigin: 'center center'
           }}
         >
           <div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16"
             style={{
               transformStyle: 'preserve-3d'
             }}
@@ -166,7 +209,7 @@ const Gallery3D = () => {
               <div
                 key={index}
                 ref={el => cubeRefs.current[index] = el}
-                className="relative group cursor-pointer"
+                className="relative group cursor-pointer mx-auto"
                 style={{
                   transformStyle: 'preserve-3d',
                   transform: 'translateZ(0)'
@@ -176,81 +219,80 @@ const Gallery3D = () => {
               >
                 {/* 3D Cube Container */}
                 <div 
-                  className="relative w-64 h-64 mx-auto"
+                  className="relative w-60 h-60 mx-auto"
                   style={{
                     transformStyle: 'preserve-3d'
                   }}
                 >
                   {/* Front Face */}
                   <div 
-                    className={`absolute inset-0 bg-gradient-to-br ${item.color} rounded-2xl shadow-2xl flex flex-col items-center justify-center text-white p-6 border border-white/20`}
+                    className={`absolute inset-0 bg-gradient-to-br ${item.color} rounded-2xl shadow-xl flex flex-col items-center justify-center text-white p-6 border border-white/20 backdrop-blur-sm`}
                     style={{
-                      transform: 'translateZ(50px)',
+                      transform: 'translateZ(30px)',
                       backfaceVisibility: 'hidden'
                     }}
                   >
-                    <div className="text-4xl mb-4">{item.icon}</div>
-                    <h3 className="text-xl font-bold mb-2 text-center">{item.title}</h3>
-                    <p className="text-sm text-center opacity-90">{item.description}</p>
+                    <div className="text-4xl mb-4 filter drop-shadow-lg">{item.icon}</div>
+                    <h3 className="text-xl font-bold mb-2 text-center drop-shadow-md">{item.title}</h3>
+                    <p className="text-sm text-center opacity-90 drop-shadow-sm">{item.description}</p>
                   </div>
 
                   {/* Back Face */}
                   <div 
-                    className={`absolute inset-0 bg-gradient-to-tl ${item.color} rounded-2xl shadow-2xl flex flex-col items-center justify-center text-white p-6 border border-white/20`}
+                    className={`absolute inset-0 bg-gradient-to-tl ${item.color} rounded-2xl shadow-xl flex flex-col items-center justify-center text-white p-6 border border-white/20 backdrop-blur-sm`}
                     style={{
-                      transform: 'translateZ(-50px) rotateY(180deg)',
+                      transform: 'translateZ(-30px) rotateY(180deg)',
                       backfaceVisibility: 'hidden'
                     }}
                   >
-                    <div className="text-3xl mb-4">✨</div>
-                    <h3 className="text-lg font-bold mb-2 text-center">Interactive</h3>
-                    <p className="text-sm text-center opacity-90">Hover to explore</p>
+                    <div className="text-3xl mb-4 filter drop-shadow-lg">✨</div>
+                    <h3 className="text-lg font-bold mb-2 text-center drop-shadow-md">Interactive</h3>
+                    <p className="text-sm text-center opacity-90 drop-shadow-sm">Hover to explore</p>
                   </div>
 
                   {/* Top Face */}
                   <div 
-                    className={`absolute inset-0 bg-gradient-to-b ${item.color} rounded-2xl shadow-xl opacity-80 border border-white/10`}
+                    className={`absolute inset-0 bg-gradient-to-b ${item.color} rounded-2xl shadow-lg opacity-70 border border-white/10`}
                     style={{
-                      transform: 'rotateX(90deg) translateZ(50px)',
+                      transform: 'rotateX(90deg) translateZ(30px)',
                       backfaceVisibility: 'hidden'
                     }}
                   ></div>
 
                   {/* Bottom Face */}
                   <div 
-                    className={`absolute inset-0 bg-gradient-to-t ${item.color} rounded-2xl shadow-xl opacity-60 border border-white/10`}
+                    className={`absolute inset-0 bg-gradient-to-t ${item.color} rounded-2xl shadow-lg opacity-50 border border-white/10`}
                     style={{
-                      transform: 'rotateX(-90deg) translateZ(50px)',
+                      transform: 'rotateX(-90deg) translateZ(30px)',
                       backfaceVisibility: 'hidden'
                     }}
                   ></div>
 
                   {/* Left Face */}
                   <div 
-                    className={`absolute inset-0 bg-gradient-to-r ${item.color} rounded-2xl shadow-xl opacity-70 border border-white/10`}
+                    className={`absolute inset-0 bg-gradient-to-r ${item.color} rounded-2xl shadow-lg opacity-60 border border-white/10`}
                     style={{
-                      transform: 'rotateY(-90deg) translateZ(50px)',
+                      transform: 'rotateY(-90deg) translateZ(30px)',
                       backfaceVisibility: 'hidden'
                     }}
                   ></div>
 
                   {/* Right Face */}
                   <div 
-                    className={`absolute inset-0 bg-gradient-to-l ${item.color} rounded-2xl shadow-xl opacity-70 border border-white/10`}
+                    className={`absolute inset-0 bg-gradient-to-l ${item.color} rounded-2xl shadow-lg opacity-60 border border-white/10`}
                     style={{
-                      transform: 'rotateY(90deg) translateZ(50px)',
+                      transform: 'rotateY(90deg) translateZ(30px)',
                       backfaceVisibility: 'hidden'
                     }}
                   ></div>
                 </div>
 
-                {/* Reflection Effect */}
+                {/* Enhanced Reflection Effect */}
                 <div 
-                  className="absolute top-full left-1/2 transform -translate-x-1/2 w-64 h-32 opacity-20 pointer-events-none"
+                  className={`absolute top-full left-1/2 transform -translate-x-1/2 w-60 h-20 opacity-10 pointer-events-none rounded-2xl blur-sm`}
                   style={{
-                    background: `linear-gradient(to bottom, transparent, ${item.color.includes('orange') ? '#f97316' : item.color.includes('blue') ? '#3b82f6' : '#10b981'})`,
-                    transform: 'translateX(-50%) scaleY(-0.5) translateZ(-10px)',
-                    filter: 'blur(2px)'
+                    background: `linear-gradient(to bottom, ${item.color.includes('orange') ? '#f97316' : item.color.includes('blue') ? '#3b82f6' : '#10b981'}, transparent)`,
+                    transform: 'translateX(-50%) scaleY(-0.3) translateZ(-5px)',
                   }}
                 ></div>
               </div>
@@ -259,9 +301,9 @@ const Gallery3D = () => {
         </div>
 
         {/* Interactive Instructions */}
-        <div className={`text-center mt-16 transition-all duration-1000 delay-500 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <p className="text-muted-foreground">
-            <span className="inline-block animate-pulse mr-2">💡</span>
+        <div className={`text-center mt-20 transition-all duration-1000 delay-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <p className="text-muted-foreground text-lg">
+            <span className="inline-block animate-pulse mr-2 text-xl">💡</span>
             Hover over the cubes to see them transform in 3D space
           </p>
         </div>
