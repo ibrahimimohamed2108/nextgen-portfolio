@@ -44,6 +44,7 @@ const Header = () => {
     { label: t('nav.experience') || 'Experience', href: '#experience' },
     { label: t('nav.education') || 'Education', href: '#education' },
     { label: t('nav.skills') || 'Skills', href: '#skills' },
+    { label: t('nav.techStack') || 'Tech Stack', href: '#tech-stack' },
     { label: "3D Gallery", href: '#gallery3d' },
     { label: t('nav.projects') || 'Projects', href: '#projects' },
     { label: t('nav.contact') || 'Contact', href: '#contact' },

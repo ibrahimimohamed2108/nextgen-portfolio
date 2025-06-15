@@ -9,6 +9,7 @@ import Skills from './Skills';
 import Contact from './Contact';
 import Projects from './Projects';
 import Gallery3D from './Gallery3D';
+import TechSolarSystem from './TechSolarSystem';
 import { InteractiveTerminal } from './interactive/InteractiveTerminal';
 import { ParticleBackground } from './ParticleBackground';
 import { ImmersiveStory } from './story/ImmersiveStory';
@@ -23,6 +24,7 @@ const Portfolio3D = () => {
     { component: Experience, id: 'experience' },
     { component: Education, id: 'education' },
     { component: Skills, id: 'skills' },
+    { component: TechSolarSystem, id: 'tech-stack' },
     { component: Gallery3D, id: 'gallery3d' },
     { component: Projects, id: 'projects' },
     { component: Contact, id: 'contact' },
