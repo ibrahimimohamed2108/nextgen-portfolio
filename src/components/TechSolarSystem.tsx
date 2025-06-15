@@ -31,17 +31,22 @@ const TechSolarSystem = () => {
   }, []);
 
   const solarSystemVariants = {
-    hidden: { scale: 0, opacity: 0 },
+    hidden: { 
+      scale: 0.8, 
+      opacity: 0,
+      rotateY: -30
+    },
     visible: {
       scale: 1,
       opacity: 1,
+      rotateY: 0,
       transition: {
         type: "spring",
-        damping: 15,
-        stiffness: 100,
-        delay: 0.5,
-        staggerChildren: 0.2,
-        delayChildren: 1
+        damping: 20,
+        stiffness: 80,
+        duration: 1.2,
+        staggerChildren: 0.15,
+        delayChildren: 0.3
       }
     }
   };
@@ -56,7 +61,12 @@ const TechSolarSystem = () => {
 
       <div className="container mx-auto px-4 text-center relative z-10">
         {/* Section Header */}
-        <div className="mb-16">
+        <motion.div 
+          className="mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8 }}
+        >
           <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
             Tech Stack Solar System
           </h2>
@@ -64,20 +74,24 @@ const TechSolarSystem = () => {
             Explore my technical universe where each planet represents a technology domain, 
             and moons orbit with the tools and frameworks within each category.
           </p>
-        </div>
+        </motion.div>
 
         {/* Solar System Container */}
         <div className="relative w-full max-w-6xl mx-auto">
           <motion.div 
             className="solar-system relative mx-auto"
-            style={{ width: '1200px', height: '1200px' }}
+            style={{ 
+              width: '1200px', 
+              height: '1200px',
+              perspective: '1000px'
+            }}
             variants={solarSystemVariants}
             initial="hidden"
             animate={isVisible ? "visible" : "hidden"}
           >
             <CentralSun />
 
-            {/* Planets and their orbits */}
+            {/* Planets with proper orbital mechanics */}
             {techData.map((category, planetIndex) => (
               <TechPlanet
                 key={category.name}
@@ -88,7 +102,13 @@ const TechSolarSystem = () => {
           </motion.div>
         </div>
 
-        <TechLegend techData={techData} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.8, delay: 1 }}
+        >
+          <TechLegend techData={techData} />
+        </motion.div>
       </div>
     </section>
   );
