@@ -1,41 +1,43 @@
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Calendar, GraduationCap, Award, BookOpen } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Education = () => {
   const { ref, isInView } = useInView({ threshold: 0.2 });
+  const { t } = useLanguage();
 
   const educationItems = [
     {
-      degree: "Ingénieur d'état, Génie Informatique et Digitalisation",
-      institution: "École mohammedia d'ingénieurs",
-      period: "2023 - 2026",
-      type: "Engineering Degree",
+      degree: t('education.engineering'),
+      institution: t('education.engineering.school'),
+      period: t('education.engineering.period'),
+      type: t('education.type.engineering'),
       icon: GraduationCap,
       color: "from-blue-500 to-cyan-600",
-      status: "In Progress",
-      description: "Specialized in software engineering and cloud computing with focus on DevOps practices."
+      status: t('education.status.inProgress'),
+      description: t('education.engineering.description')
     },
     {
-      degree: "Mathématiques et Physique",
-      institution: "CPGE - Classes préparatoires aux grandes écoles",
-      period: "2021 - 2023",
-      type: "Preparatory Classes",
+      degree: t('education.prep'),
+      institution: t('education.prep.school'),
+      period: t('education.prep.period'),
+      type: t('education.type.preparatory'),
       icon: BookOpen,
       color: "from-purple-500 to-violet-600",
-      status: "Completed",
-      description: "Intensive preparation program focusing on advanced mathematics and physics."
+      status: t('education.status.completed'),
+      description: t('education.prep.description')
     },
     {
-      degree: "Baccalauréat, Sciences Mathématiques A",
-      institution: "Lycée Mohammed VI, Oujda",
-      period: "September 2020 - June 2021",
-      type: "High School Diploma",
+      degree: t('education.bac'),
+      institution: t('education.bac.school'),
+      period: t('education.bac.period'),
+      type: t('education.type.highSchool'),
       icon: Award,
       color: "from-green-500 to-emerald-600",
-      status: "Completed",
-      description: "Scientific track with emphasis on mathematics and natural sciences."
+      status: t('education.status.completed'),
+      description: t('education.bac.description')
     }
   ];
 
@@ -44,7 +46,7 @@ const Education = () => {
       <div className="container mx-auto px-4">
         <div className={`text-center mb-12 transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-            Academic Journey
+            {t('education.title')}
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-blue-600 mx-auto rounded-full"></div>
         </div>
@@ -60,7 +62,7 @@ const Education = () => {
                 return (
                   <Card 
                     key={index}
-                    className={`relative ml-12 md:ml-20 group hover:shadow-xl transition-all duration-500 border-l-4 border-l-transparent hover:border-l-primary ${isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
+                    className={`relative ml-12 md:ml-20 group hover:shadow-xl transition-all duration-500 border-l-4 border-l-transparent hover:border-l-primary hover:scale-[1.02] ${isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
                     style={{ transitionDelay: `${index * 200}ms` }}
                   >
                     {/* Timeline dot */}
@@ -71,12 +73,12 @@ const Education = () => {
                     <CardHeader>
                       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                         <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
+                          <div className="flex items-center gap-3 mb-2 flex-wrap">
                             <CardTitle className="text-lg group-hover:text-primary transition-colors">
                               {item.degree}
                             </CardTitle>
                             <span className={`px-2 py-1 text-xs rounded-full ${
-                              item.status === 'In Progress' 
+                              item.status === t('education.status.inProgress')
                                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' 
                                 : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
                             }`}>

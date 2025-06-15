@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'en' | 'fr';
 
@@ -44,6 +44,13 @@ const translations = {
     'experience.location': 'Rabat, Morocco',
     'experience.description': 'At the General Treasury of the Kingdom, I participated in IT systems urbanization, aimed at structuring and optimizing computer systems architecture for better interoperability and IT resource management.',
     'experience.missions': 'Missions accomplished:',
+    'experience.mission1': 'Deployment and configuration of GLPI (ITSM), Mercator (SIEM & SI mapping) and OpenProject (agile project management) solutions',
+    'experience.mission2': 'Implementation of virtualized infrastructure',
+    'experience.mission3': 'MySQL database management (schema creation, privilege management, query optimization)',
+    'experience.mission4': 'Integration of centralized authentication with LDAP and Active Directory',
+    'experience.mission5': 'Application performance optimization via Apache2, PHP and specific configurations',
+    'experience.mission6': 'Writing detailed user guides for each deployed solution',
+    'experience.mission7': 'Presentation and demonstration of tools and solutions to IT and business teams',
     
     // Education Section
     'education.title': 'Academic Journey',
@@ -72,6 +79,8 @@ const translations = {
     'skills.category.backend': 'Backend Development',
     'skills.category.devops': 'DevOps & Cloud',
     'skills.category.databases': 'Databases',
+    'skills.category.tools': 'Development Tools',
+    'skills.category.languages': 'Programming Languages',
     
     // Contact Section
     'contact.title': 'Get In Touch',
@@ -80,7 +89,18 @@ const translations = {
     'contact.email': 'Email',
     'contact.linkedin': 'LinkedIn',
     'contact.github': 'GitHub',
-    'contact.sendMessage': 'Send Message'
+    'contact.sendMessage': 'Send Message',
+    'contact.form.name': 'Your Name',
+    'contact.form.email': 'Your Email',
+    'contact.form.subject': 'Subject',
+    'contact.form.message': 'Your Message',
+    'contact.form.send': 'Send Message',
+    'contact.form.sending': 'Sending...',
+    
+    // Common
+    'common.loading': 'Loading...',
+    'common.error': 'An error occurred',
+    'common.success': 'Success!'
   },
   fr: {
     // Navigation
@@ -106,6 +126,13 @@ const translations = {
     'experience.location': 'Rabat, Maroc',
     'experience.description': 'Au sein de la Trésorerie Générale du Royaume, j\'ai participé à l\'urbanisation du SI, visant à structurer et optimiser l\'architecture des systèmes informatiques pour une meilleure interopérabilité et gestion des ressources IT.',
     'experience.missions': 'Missions réalisées :',
+    'experience.mission1': 'Déploiement et configuration des solutions GLPI (ITSM), Mercator (SIEM & cartographie SI) et OpenProject (gestion de projet agile)',
+    'experience.mission2': 'Mise en place d\'une infrastructure virtualisée',
+    'experience.mission3': 'Gestion des bases de données MySQL (création des schémas, gestion des privilèges, optimisation des requêtes)',
+    'experience.mission4': 'Intégration de l\'authentification centralisée avec LDAP et Active Directory',
+    'experience.mission5': 'Optimisation des performances des applications via Apache2, PHP et configurations spécifiques',
+    'experience.mission6': 'Rédaction de guides d\'utilisation détaillés pour chaque solution déployée',
+    'experience.mission7': 'Présentation et démonstration des outils et solutions auprès des équipes IT et métiers',
     
     // Education Section
     'education.title': 'Parcours Académique',
@@ -134,6 +161,8 @@ const translations = {
     'skills.category.backend': 'Développement Backend',
     'skills.category.devops': 'DevOps et Cloud',
     'skills.category.databases': 'Bases de Données',
+    'skills.category.tools': 'Outils de Développement',
+    'skills.category.languages': 'Langages de Programmation',
     
     // Contact Section
     'contact.title': 'Prenons Contact',
@@ -142,7 +171,18 @@ const translations = {
     'contact.email': 'Email',
     'contact.linkedin': 'LinkedIn',
     'contact.github': 'GitHub',
-    'contact.sendMessage': 'Envoyer un Message'
+    'contact.sendMessage': 'Envoyer un Message',
+    'contact.form.name': 'Votre Nom',
+    'contact.form.email': 'Votre Email',
+    'contact.form.subject': 'Sujet',
+    'contact.form.message': 'Votre Message',
+    'contact.form.send': 'Envoyer le Message',
+    'contact.form.sending': 'Envoi en cours...',
+    
+    // Common
+    'common.loading': 'Chargement...',
+    'common.error': 'Une erreur s\'est produite',
+    'common.success': 'Succès !'
   }
 };
 
@@ -156,10 +196,14 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return 'en';
   });
 
+  useEffect(() => {
+    localStorage.setItem('language', language);
+    document.documentElement.lang = language;
+  }, [language]);
+
   const toggleLanguage = () => {
     const newLanguage = language === 'en' ? 'fr' : 'en';
     setLanguage(newLanguage);
-    localStorage.setItem('language', newLanguage);
   };
 
   const t = (key: string): string => {

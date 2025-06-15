@@ -3,18 +3,33 @@ import { Button } from "@/components/ui/button";
 import { Download, Mail, Github, Linkedin, ChevronDown } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ParticleBackground } from "@/components/ParticleBackground";
 
 const Hero = () => {
   const { ref, isInView } = useInView({ threshold: 0.3 });
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const downloadCV = () => {
+    // Create different CV versions based on language
+    const cvUrl = language === 'fr' ? '/cv-mohamed-ibrahimi-fr.pdf' : '/cv-mohamed-ibrahimi-en.pdf';
+    const link = document.createElement('a');
+    link.href = cvUrl;
+    link.download = `Mohamed_IBRAHIMI_CV_${language.toUpperCase()}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section id="about" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-background via-background to-primary/5" ref={ref}>
+      {/* Particle Background */}
+      <ParticleBackground />
+      
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
@@ -29,7 +44,7 @@ const Hero = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-primary to-blue-600 rounded-full blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
               <img 
-                src="https://media.licdn.com/dms/image/v2/D4D03AQHF0N9FWLh_UA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1672424593087?e=1755734400&v=beta&t=k5GPitXqeM6C9n57L-hqqajOyKsHUx-_yExf1Q6ZX5o"
+                src="/lovable-uploads/03afd6d9-cfb1-458d-9190-2d0547094144.png"
                 alt="Mohamed IBRAHIMI"
                 className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-full object-cover border-4 border-background shadow-2xl group-hover:scale-105 transition-transform duration-500"
               />
@@ -40,7 +55,7 @@ const Hero = () => {
           {/* Content */}
           <div className={`flex-1 text-center lg:text-left transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="space-y-6">
-              <div>
+              <div className={`transition-all duration-700 ${language === 'fr' ? 'animate-fade-in' : 'animate-fade-in'}`}>
                 <p className="text-lg text-muted-foreground mb-2 animate-fade-in">
                   {t('hero.greeting')}
                 </p>
@@ -65,7 +80,8 @@ const Hero = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Button 
                   size="lg" 
-                  className="group bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl"
+                  onClick={downloadCV}
+                  className="group bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                 >
                   <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
                   {t('hero.downloadCV')}
@@ -74,7 +90,7 @@ const Hero = () => {
                   size="lg" 
                   variant="outline"
                   onClick={() => scrollToSection('contact')}
-                  className="group border-primary/20 hover:border-primary hover:bg-primary/5 transition-all duration-300"
+                  className="group border-primary/20 hover:border-primary hover:bg-primary/5 transition-all duration-300 hover:scale-105"
                 >
                   <Mail className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                   {t('hero.contactMe')}
@@ -83,13 +99,28 @@ const Hero = () => {
 
               {/* Social Links */}
               <div className="flex gap-4 justify-center lg:justify-start">
-                <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:scale-110 transition-all duration-300">
+                <Button 
+                  size="icon" 
+                  variant="ghost" 
+                  className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
+                  onClick={() => window.open('https://github.com/mohamedibrahimi', '_blank')}
+                >
                   <Github className="h-5 w-5" />
                 </Button>
-                <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:scale-110 transition-all duration-300">
+                <Button 
+                  size="icon" 
+                  variant="ghost" 
+                  className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
+                  onClick={() => window.open('https://linkedin.com/in/mohamedibrahimi', '_blank')}
+                >
                   <Linkedin className="h-5 w-5" />
                 </Button>
-                <Button size="icon" variant="ghost" className="hover:bg-primary/10 hover:scale-110 transition-all duration-300">
+                <Button 
+                  size="icon" 
+                  variant="ghost" 
+                  className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
+                  onClick={() => scrollToSection('contact')}
+                >
                   <Mail className="h-5 w-5" />
                 </Button>
               </div>
