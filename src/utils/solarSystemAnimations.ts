@@ -1,5 +1,4 @@
-
-import { anime } from 'animejs/lib/anime.es.js';
+import anime from 'animejs';
 import { TechCategory } from '@/types/techStack';
 
 export const createPlanetAnimations = (techData: TechCategory[]) => {
