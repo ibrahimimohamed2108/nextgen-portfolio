@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Download, Mail } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -29,7 +28,7 @@ const HeroActions = () => {
   };
 
   const downloadCV = () => {
-    console.log('Download CV button clicked');
+    console.log('Download CV button clicked - Debug log');
     const cvContent = `# 👨‍💻 Mohamed Ibrahimi  
 **Engineering Student | Software Development | Cloud & DevOps Enthusiast**  
 📍 Morocco | 🎓 École Mohammadia d'Ingénieurs  
@@ -159,16 +158,16 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
   };
 
   const handleContactClick = () => {
-    console.log('Contact Me button clicked');
+    console.log('Contact Me button clicked - Debug log');
     scrollToSection('contact');
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pointer-events-auto">
       <Button 
         size="lg" 
         onClick={downloadCV}
-        className="group bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 relative z-50 cursor-pointer"
+        className="group bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 relative z-50 cursor-pointer pointer-events-auto"
         type="button"
       >
         <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
@@ -178,7 +177,7 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
         size="lg" 
         variant="outline"
         onClick={handleContactClick}
-        className="group border-primary/20 hover:border-primary hover:bg-primary/5 transition-all duration-300 hover:scale-105 relative z-50 cursor-pointer"
+        className="group border-primary/20 hover:border-primary hover:bg-primary/5 transition-all duration-300 hover:scale-105 relative z-50 cursor-pointer pointer-events-auto"
         type="button"
       >
         <Mail className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
