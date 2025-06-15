@@ -230,7 +230,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, [language]);
 
   const t = useCallback((key: string, params?: Record<string, any>) => {
-    return i18n.t(key, { ...params });
+    const result = i18n.t(key, { ...params });
+    return typeof result === 'string' ? result : String(result);
   }, []);
 
   const value: LanguageContextProps = {
