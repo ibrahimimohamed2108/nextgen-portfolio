@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
-import * as anime from 'animejs';
+import anime from 'animejs/lib/anime.es.js';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Code, Server, Cloud, Wrench, Lightbulb, Monitor } from 'lucide-react';
 
@@ -88,9 +88,6 @@ const TechSolarSystem = () => {
 
   useEffect(() => {
     if (!isVisible || !containerRef.current) return;
-
-    // Clear any existing animations
-    anime.remove('.planet, .moon');
 
     // Animate planets orbiting around the center
     techData.forEach((category, index) => {
