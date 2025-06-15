@@ -1,16 +1,17 @@
-
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Text, Float, Environment, PerspectiveCamera, useScroll } from '@react-three/drei';
+import { OrbitControls, Text, Float, Environment, PerspectiveCamera } from '@react-three/drei';
 import { useRef, useState, useEffect, Suspense } from 'react';
-import { Vector3, Color } from 'three';
+import { Vector3 } from 'three';
 import * as THREE from 'three';
-import { motion } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { isWebGLAvailable } from '@/utils/webglUtils';
+import { WebGLErrorFallback } from './WebGLErrorFallback';
 
 interface Scene3DProps {
   currentSection: number;
   onSectionChange: (section: number) => void;
+  onWebGLError?: () => void;
 }
 
 const CameraController = ({ currentSection }: { currentSection: number }) => {
@@ -145,9 +146,50 @@ const ParticleField = () => {
   );
 };
 
-export const Scene3D: React.FC<Scene3DProps> = ({ currentSection, onSectionChange }) => {
+export const Scene3D: React.FC<Scene3DProps> = ({ currentSection, onSectionChange, onWebGLError }) => {
   const { t } = useLanguage();
   const { theme } = useTheme();
+  const [webglSupported, setWebglSupported] = useState<boolean | null>(null);
+  const [renderError, setRenderError] = useState(false);
+
+  useEffect(() => {
+    const checkWebGL = () => {
+      const supported = isWebGLAvailable();
+      setWebglSupported(supported);
+      
+      if (!supported && onWebGLError) {
+        onWebGLError();
+      }
+    };
+
+    checkWebGL();
+  }, [onWebGLError]);
+
+  const handleCanvasError = () => {
+    console.error('Canvas creation failed, falling back to 2D');
+    setRenderError(true);
+    if (onWebGLError) {
+      onWebGLError();
+    }
+  };
+
+  // Show loading while checking WebGL support
+  if (webglSupported === null) {
+    return (
+      <div className="fixed inset-0 z-0 flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // Show error fallback if WebGL is not supported or canvas creation failed
+  if (!webglSupported || renderError) {
+    return (
+      <WebGLErrorFallback 
+        onFallbackTo2D={onWebGLError || (() => {})} 
+      />
+    );
+  }
 
   const sections = [
     { key: 'hero', title: t('nav.about'), position: [0, 0, 0] as [number, number, number] },
@@ -159,7 +201,16 @@ export const Scene3D: React.FC<Scene3DProps> = ({ currentSection, onSectionChang
 
   return (
     <div className="fixed inset-0 z-0">
-      <Canvas>
+      <Canvas
+        onCreated={(state) => {
+          // Additional check when canvas is created
+          if (!state.gl.getContext()) {
+            handleCanvasError();
+          }
+        }}
+        onError={handleCanvasError}
+        fallback={<WebGLErrorFallback onFallbackTo2D={onWebGLError || (() => {})} />}
+      >
         <Suspense fallback={null}>
           <Environment preset="city" />
           <PerspectiveCamera makeDefault position={[0, 0, 10]} />

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Scene3D } from './3d/Scene3D';
@@ -17,6 +16,7 @@ export const Portfolio3D = () => {
   const [view3D, setView3D] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
   const [showStory, setShowStory] = useState(false);
+  const [webglError, setWebglError] = useState(false);
   const { t } = useLanguage();
 
   const sections = ['hero', 'experience', 'education', 'skills', 'contact'];
@@ -35,6 +35,19 @@ export const Portfolio3D = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [view3D]);
 
+  const handleWebGLError = () => {
+    setWebglError(true);
+    setView3D(false);
+  };
+
+  const handle3DToggle = () => {
+    if (webglError) {
+      // Show a toast or alert that 3D is not available
+      return;
+    }
+    setView3D(!view3D);
+  };
+
   return (
     <div className="relative min-h-screen overflow-x-hidden">
       {/* Header with 3D Toggle */}
@@ -43,18 +56,26 @@ export const Portfolio3D = () => {
       {/* 3D View Toggle Controls */}
       <div className="fixed top-20 right-4 z-50 flex flex-col gap-2">
         <motion.button
-          onClick={() => setView3D(!view3D)}
+          onClick={handle3DToggle}
+          disabled={webglError}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg backdrop-blur-md border transition-all ${
             view3D 
               ? 'bg-primary text-primary-foreground border-primary' 
+              : webglError
+              ? 'bg-muted text-muted-foreground border-muted cursor-not-allowed'
               : 'bg-background/80 border-border hover:bg-primary/10'
           }`}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={webglError ? {} : { scale: 1.05 }}
+          whileTap={webglError ? {} : { scale: 0.95 }}
         >
           <Layers3 className="h-4 w-4" />
           <span className="text-sm font-medium">
-            {view3D ? (t('3d.exit') || 'Exit 3D') : (t('3d.enter') || 'Enter 3D')}
+            {webglError 
+              ? (t('3d.unavailable') || '3D Unavailable')
+              : view3D 
+              ? (t('3d.exit') || 'Exit 3D') 
+              : (t('3d.enter') || 'Enter 3D')
+            }
           </span>
         </motion.button>
 
@@ -109,7 +130,7 @@ export const Portfolio3D = () => {
           >
             <ImmersiveStory />
           </motion.div>
-        ) : view3D ? (
+        ) : view3D && !webglError ? (
           <motion.div
             key="3d"
             initial={{ opacity: 0 }}
@@ -118,7 +139,11 @@ export const Portfolio3D = () => {
             transition={{ duration: 0.5 }}
             className="h-screen"
           >
-            <Scene3D currentSection={currentSection} onSectionChange={setCurrentSection} />
+            <Scene3D 
+              currentSection={currentSection} 
+              onSectionChange={setCurrentSection}
+              onWebGLError={handleWebGLError}
+            />
             
             {/* 3D Content Overlay */}
             <div className="absolute inset-0 pointer-events-none z-10">
