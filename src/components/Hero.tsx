@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Download, Mail, Github, Linkedin, ChevronDown } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
@@ -12,6 +11,7 @@ const Hero = () => {
   const { toast } = useToast();
 
   const scrollToSection = (sectionId: string) => {
+    console.log(`Attempting to scroll to section: ${sectionId}`);
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -19,7 +19,7 @@ const Hero = () => {
         title: "Navigating",
         description: `Scrolling to ${sectionId} section`,
       });
-      console.log(`Scrolling to section: ${sectionId}`);
+      console.log(`Successfully scrolling to section: ${sectionId}`);
     } else {
       console.error(`Section with id '${sectionId}' not found`);
       toast({
@@ -31,6 +31,7 @@ const Hero = () => {
   };
 
   const downloadCV = () => {
+    console.log('Download CV button clicked');
     const cvContent = `# 👨‍💻 Mohamed Ibrahimi  
 **Engineering Student | Software Development | Cloud & DevOps Enthusiast**  
 📍 Morocco | 🎓 École Mohammadia d'Ingénieurs  
@@ -159,7 +160,13 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
     }
   };
 
-  const openGitHub = () => {
+  const handleContactClick = () => {
+    console.log('Contact Me button clicked');
+    scrollToSection('contact');
+  };
+
+  const handleGitHubClick = () => {
+    console.log('GitHub icon clicked');
     try {
       window.open('https://github.com/ibrahimimohamed2108', '_blank', 'noopener,noreferrer');
       toast({
@@ -177,7 +184,8 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
     }
   };
 
-  const openLinkedIn = () => {
+  const handleLinkedInClick = () => {
+    console.log('LinkedIn icon clicked');
     try {
       window.open('https://www.linkedin.com/in/ibrahimimohamed', '_blank', 'noopener,noreferrer');
       toast({
@@ -195,7 +203,8 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
     }
   };
 
-  const openEmail = () => {
+  const handleEmailClick = () => {
+    console.log('Email icon clicked');
     try {
       window.location.href = 'mailto:ibrahimimoahamed2108@gmail.com';
       toast({
@@ -291,7 +300,8 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
                 <Button 
                   size="lg" 
                   onClick={downloadCV}
-                  className="group bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                  className="group bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 relative z-50 cursor-pointer"
+                  type="button"
                 >
                   <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
                   {t('hero.downloadCV')}
@@ -299,8 +309,9 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
                 <Button 
                   size="lg" 
                   variant="outline"
-                  onClick={() => scrollToSection('contact')}
-                  className="group border-primary/20 hover:border-primary hover:bg-primary/5 transition-all duration-300 hover:scale-105"
+                  onClick={handleContactClick}
+                  className="group border-primary/20 hover:border-primary hover:bg-primary/5 transition-all duration-300 hover:scale-105 relative z-50 cursor-pointer"
+                  type="button"
                 >
                   <Mail className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                   {t('hero.contactMe')}
@@ -312,27 +323,30 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
                 <Button 
                   size="icon" 
                   variant="ghost" 
-                  className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
-                  onClick={openGitHub}
+                  className="hover:bg-primary/10 hover:scale-110 transition-all duration-300 relative z-50 cursor-pointer"
+                  onClick={handleGitHubClick}
                   aria-label="Visit GitHub Profile"
+                  type="button"
                 >
                   <Github className="h-5 w-5" />
                 </Button>
                 <Button 
                   size="icon" 
                   variant="ghost" 
-                  className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
-                  onClick={openLinkedIn}
+                  className="hover:bg-primary/10 hover:scale-110 transition-all duration-300 relative z-50 cursor-pointer"
+                  onClick={handleLinkedInClick}
                   aria-label="Visit LinkedIn Profile"
+                  type="button"
                 >
                   <Linkedin className="h-5 w-5" />
                 </Button>
                 <Button 
                   size="icon" 
                   variant="ghost" 
-                  className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
-                  onClick={openEmail}
+                  className="hover:bg-primary/10 hover:scale-110 transition-all duration-300 relative z-50 cursor-pointer"
+                  onClick={handleEmailClick}
                   aria-label="Send Email"
+                  type="button"
                 >
                   <Mail className="h-5 w-5" />
                 </Button>
@@ -344,7 +358,7 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <ChevronDown 
-            className="h-6 w-6 text-muted-foreground cursor-pointer hover:text-primary transition-colors"
+            className="h-6 w-6 text-muted-foreground cursor-pointer hover:text-primary transition-colors relative z-50"
             onClick={() => scrollToSection('experience')}
           />
         </div>
