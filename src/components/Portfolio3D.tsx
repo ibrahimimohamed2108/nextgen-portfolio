@@ -1,6 +1,6 @@
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Scene3D } from './3d/Scene3D';
 import { EnhancedControls } from './3d/EnhancedControls';
 import { InteractiveTerminal } from './interactive/InteractiveTerminal';
 import { ImmersiveStory } from './story/ImmersiveStory';

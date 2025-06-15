@@ -1,6 +1,21 @@
 
 import { useEffect, useRef, useState } from 'react';
-import { Engine, Scene, Vector3, HemisphericLight, DirectionalLight, Color3, MeshBuilder, StandardMaterial, Animation, BezierCurveEase, FreeCamera, TargetCamera } from '@babylonjs/core';
+import { 
+  Engine, 
+  Scene, 
+  Vector3, 
+  HemisphericLight, 
+  DirectionalLight, 
+  Color3, 
+  Color4,
+  MeshBuilder, 
+  StandardMaterial, 
+  Animation, 
+  BezierCurveEase, 
+  FreeCamera,
+  ActionManager,
+  ExecuteCodeAction
+} from '@babylonjs/core';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { GraphicsCapabilities } from '@/utils/webgpuUtils';
@@ -50,7 +65,7 @@ export const BabylonScene: React.FC<BabylonSceneProps> = ({
           preserveDrawingBuffer: false,
           premultipliedAlpha: false,
           alpha: true,
-          powerPreference: capabilities.performanceLevel === 'high' ? 'high-performance' : 'default'
+          powerPreference: capabilities.performanceLevel === 'high' ? 'high-performance' as const : 'default' as const
         };
 
         const engine = new Engine(canvasRef.current, true, engineOptions);
@@ -61,16 +76,17 @@ export const BabylonScene: React.FC<BabylonSceneProps> = ({
         sceneRef.current = scene;
         
         // Set background color based on theme
-        scene.clearColor = new Color3(
+        scene.clearColor = new Color4(
           theme === 'dark' ? 0 : 1,
           theme === 'dark' ? 0 : 1,
-          theme === 'dark' ? 0 : 1
+          theme === 'dark' ? 0 : 1,
+          1
         );
 
         // Create camera
         const camera = new FreeCamera('camera', new Vector3(0, 0, 12), scene);
         camera.setTarget(Vector3.Zero());
-        camera.attachToCanvas(canvasRef.current, true);
+        camera.attachControls(canvasRef.current, true);
         cameraRef.current = camera;
 
         // Enhanced lighting setup
@@ -100,9 +116,9 @@ export const BabylonScene: React.FC<BabylonSceneProps> = ({
           panel.material = material;
 
           // Add click interaction
-          panel.actionManager = new BABYLON.ActionManager(scene);
-          panel.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
-            BABYLON.ActionManager.OnPickTrigger,
+          panel.actionManager = new ActionManager(scene);
+          panel.actionManager.registerAction(new ExecuteCodeAction(
+            ActionManager.OnPickTrigger,
             () => onSectionChange(index)
           ));
 
