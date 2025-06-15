@@ -1,6 +1,6 @@
 
 import { useState, useRef, useEffect } from 'react';
-import { Terminal, Send, User, Bot } from 'lucide-react';
+import { Terminal, Send, User, Bot, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -9,6 +9,7 @@ interface TerminalMessage {
   type: 'user' | 'system';
   content: string;
   timestamp: Date;
+  isLink?: boolean;
 }
 
 export const InteractiveTerminal = () => {
@@ -20,30 +21,59 @@ export const InteractiveTerminal = () => {
 
   const commands = {
     help: () => language === 'fr' 
-      ? 'Commandes disponibles: help, about, skills, experience, contact, clear, theme'
-      : 'Available commands: help, about, skills, experience, contact, clear, theme',
+      ? 'Commandes disponibles: help, about, skills, experience, education, certifications, projects, contact, clear, theme, stage, github, linkedin'
+      : 'Available commands: help, about, skills, experience, education, certifications, projects, contact, clear, theme, stage, github, linkedin',
+    
     about: () => language === 'fr'
-      ? 'Je suis Mohamed IBRAHIMI, étudiant ingénieur passionné par le développement logiciel et l\'innovation technologique.'
-      : 'I am Mohamed IBRAHIMI, an engineering student passionate about software development and technological innovation.',
+      ? 'Je suis Mohamed IBRAHIMI, étudiant ingénieur à l\'École Mohammadia d\'Ingénieurs, spécialisé en Génie Logiciel et Digitalisation. Je suis passionné par le développement logiciel, le cloud computing et les pratiques DevOps.'
+      : 'I am Mohamed IBRAHIMI, an engineering student at École Mohammadia d\'Ingénieurs, specializing in Software Engineering and Digitalization. I am passionate about software development, cloud computing, and DevOps practices.',
+    
     skills: () => language === 'fr'
-      ? 'Compétences: React, TypeScript, Three.js, Python, Java, C++, Machine Learning, Cloud Computing'
-      : 'Skills: React, TypeScript, Three.js, Python, Java, C++, Machine Learning, Cloud Computing',
+      ? 'Compétences: Java, Spring Boot, React, TypeScript, Python, C, C++, Git, GitHub, Docker, Kubernetes, Terraform, AWS, Agile, CI/CD, DevOps, MySQL, Architecture Cloud Native'
+      : 'Skills: Java, Spring Boot, React, TypeScript, Python, C, C++, Git, GitHub, Docker, Kubernetes, Terraform, AWS, Agile, CI/CD, DevOps, MySQL, Cloud Native Architecture',
+    
     experience: () => language === 'fr'
-      ? 'Actuellement stagiaire en développement logiciel chez OCP Group, travaillant sur des solutions innovantes.'
-      : 'Currently a software development intern at OCP Group, working on innovative solutions.',
+      ? '- Stagiaire, Trésorerie Générale du Royaume\n  Participation à l\'urbanisation des systèmes d\'information:\n    • Déploiement de GLPI, Mercator et OpenProject\n    • Mise en place d\'infrastructure virtualisée\n    • Configuration Apache2, MySQL & PHP\n    • Intégration authentification LDAP et Active Directory'
+      : '- Intern, Trésorerie Générale du Royaume\n  Participated in information systems urbanization:\n    • Deployed GLPI, Mercator, and OpenProject\n    • Set up virtualized infrastructure\n    • Configured Apache2, MySQL & PHP\n    • Integrated LDAP and Active Directory authentication',
+    
+    education: () => language === 'fr'
+      ? '- Diplôme d\'Ingénieur, École Mohammadia d\'Ingénieurs (2023–2026)\n- Classes Préparatoires, Maths/Physique (2021–2023)\n- Baccalauréat, Sciences Mathématiques A (2020–2021)'
+      : '- Engineering Degree, École Mohammadia d\'Ingénieurs (2023–2026)\n- Classes Préparatoires, Maths/Physics (2021–2023)\n- Baccalaureate, Sciences Mathématiques A (2020–2021)',
+    
+    certifications: () => language === 'fr'
+      ? '- AWS Cloud Practitioner (DataCamp)\n- CI/CD, Cloud, Git & GitHub, Agile, Cybersécurité (IBM)\n- Réseaux Informatiques (Huawei)\n- Programmation Java I & II (Université d\'Helsinki)'
+      : '- AWS Cloud Practitioner (DataCamp)\n- CI/CD, Cloud, Git & GitHub, Agile, Cybersecurity (IBM)\n- Computer Network (Huawei)\n- Java Programming I & II (University of Helsinki)',
+    
+    projects: () => language === 'fr'
+      ? '- Pipeline CI/CD automatisé sur AWS avec Jenkins, Kubernetes & Terraform\n- Application e-commerce utilisant Angular & Firebase\n- Système de restaurant & billetterie en C'
+      : '- Automated CI/CD pipeline on AWS with Jenkins, Kubernetes & Terraform\n- E-commerce application using Angular & Firebase\n- Restaurant & ticketing system in C',
+    
     contact: () => language === 'fr'
-      ? 'Email: mohamed.ibrahimi@example.com | LinkedIn: linkedin.com/in/mohamedibrahimi'
-      : 'Email: mohamed.ibrahimi@example.com | LinkedIn: linkedin.com/in/mohamedibrahimi',
+      ? 'Email: ibrahimimoahamed2108@gmail.com\nLinkedIn: linkedin.com/in/ibrahimimohamed\nGitHub: github.com/ibrahimimohamed2108'
+      : 'Email: ibrahimimoahamed2108@gmail.com\nLinkedIn: linkedin.com/in/ibrahimimohamed\nGitHub: github.com/ibrahimimohamed2108',
+    
+    stage: () => language === 'fr'
+      ? 'Actuellement à la recherche d\'un stage PFA de 2 mois (Juillet–Août 2025) pour appliquer mes compétences DevOps, cloud et génie logiciel dans des projets concrets.'
+      : 'Currently seeking a 2-month PFA internship (July–August 2025) to apply my DevOps, cloud, and software engineering skills in real-world projects.',
+    
+    github: () => 'LINK:https://github.com/ibrahimimohamed2108',
+    
+    linkedin: () => 'LINK:https://linkedin.com/in/ibrahimimohamed',
+    
     clear: () => 'CLEAR',
-    theme: () => language === 'fr' ? 'Utilise le commutateur en haut pour changer le thème' : 'Use the theme toggle in the header to change themes'
+    
+    theme: () => language === 'fr' 
+      ? 'Utilisez le commutateur en haut pour changer le thème' 
+      : 'Use the theme toggle in the header to change themes'
   };
 
-  const addMessage = (content: string, type: 'user' | 'system') => {
+  const addMessage = (content: string, type: 'user' | 'system', isLink: boolean = false) => {
     const message: TerminalMessage = {
       id: Date.now().toString(),
       type,
       content,
-      timestamp: new Date()
+      timestamp: new Date(),
+      isLink
     };
     setMessages(prev => [...prev, message]);
   };
@@ -56,6 +86,15 @@ export const InteractiveTerminal = () => {
       const response = (commands as any)[cmd]();
       if (response === 'CLEAR') {
         setMessages([]);
+      } else if (response.startsWith('LINK:')) {
+        const url = response.replace('LINK:', '');
+        const linkText = language === 'fr' 
+          ? `Ouverture du profil ${cmd === 'github' ? 'GitHub' : 'LinkedIn'}...\n→ ${url}`
+          : `Opening ${cmd === 'github' ? 'GitHub' : 'LinkedIn'} profile...\n→ ${url}`;
+        setTimeout(() => {
+          addMessage(linkText, 'system', true);
+          window.open(url, '_blank');
+        }, 500);
       } else {
         setTimeout(() => addMessage(response, 'system'), 500);
       }
@@ -135,7 +174,19 @@ export const InteractiveTerminal = () => {
                   ) : (
                     <Bot className="h-4 w-4 mt-0.5 flex-shrink-0" />
                   )}
-                  <span className="break-words">{message.content}</span>
+                  <div className="break-words whitespace-pre-line flex-1">
+                    {message.isLink && message.content.includes('→') ? (
+                      <div>
+                        {message.content.split('→')[0]}
+                        <span className="text-cyan-400 underline cursor-pointer flex items-center gap-1">
+                          → {message.content.split('→')[1]}
+                          <ExternalLink className="h-3 w-3" />
+                        </span>
+                      </div>
+                    ) : (
+                      message.content
+                    )}
+                  </div>
                 </motion.div>
               ))}
               <div ref={messagesEndRef} />
