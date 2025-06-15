@@ -23,7 +23,7 @@ export const ImmersiveStory = () => {
     offset: ["start end", "end start"]
   });
 
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
   const [currentChapter, setCurrentChapter] = useState(0);
 
   const chapters: StoryChapter[] = [

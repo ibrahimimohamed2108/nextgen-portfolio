@@ -10,6 +10,7 @@ import Contact from './Contact';
 import Projects from './Projects';
 import { InteractiveTerminal } from './interactive/InteractiveTerminal';
 import { ParticleBackground } from './ParticleBackground';
+import { ImmersiveStory } from './story/ImmersiveStory';
 
 const Portfolio3D = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -17,6 +18,7 @@ const Portfolio3D = () => {
 
   const sections = [
     { component: Hero, id: 'hero' },
+    { component: ImmersiveStory, id: 'story' },
     { component: Experience, id: 'experience' },
     { component: Education, id: 'education' },
     { component: Skills, id: 'skills' },
@@ -66,7 +68,7 @@ const Portfolio3D = () => {
           <div
             key={Section.id}
             className="min-h-screen"
-            style={{ height: '100vh' }}
+            style={{ height: index === 1 ? 'auto' : '100vh' }} // Story section has auto height for scrolling
           >
             <Section.component />
           </div>
