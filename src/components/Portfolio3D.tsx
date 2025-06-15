@@ -58,20 +58,27 @@ const Portfolio3D = () => {
   };
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen overflow-x-hidden">
       <ParticleBackground />
       
       <Header />
 
       <main className="relative z-10">
         {sections.map((Section, index) => (
-          <div
+          <section
             key={Section.id}
-            className="min-h-screen"
-            style={{ height: index === 1 ? 'auto' : '100vh' }} // Story section has auto height for scrolling
+            id={Section.id}
+            className="relative w-full"
+            style={{ 
+              minHeight: index === 1 ? 'auto' : '100vh',
+              paddingTop: index === 0 ? '0' : '0',
+              isolation: 'isolate'
+            }}
           >
-            <Section.component />
-          </div>
+            <div className="relative z-10">
+              <Section.component />
+            </div>
+          </section>
         ))}
       </main>
 

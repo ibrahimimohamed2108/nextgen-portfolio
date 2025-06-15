@@ -31,13 +31,17 @@ const Projects = () => {
   ];
 
   return (
-    <section id="projects" className="py-16 bg-gradient-to-b from-muted/30 to-background" ref={ref}>
-      <div className="container mx-auto px-4">
-        <div className={`text-center mb-12 transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+    <section 
+      ref={ref} 
+      className="relative w-full py-20 bg-gradient-to-b from-muted/30 to-background overflow-hidden"
+      style={{ isolation: 'isolate' }}
+    >
+      <div className="container mx-auto px-4 relative z-10">
+        <div className={`text-center mb-16 transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
             {t('projects.title')}
           </h2>
-          <p className="text-muted-foreground text-lg mb-6">{t('projects.description')}</p>
+          <p className="text-muted-foreground text-lg mb-6 max-w-2xl mx-auto">{t('projects.description')}</p>
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-blue-600 mx-auto rounded-full"></div>
         </div>
         
@@ -48,8 +52,11 @@ const Projects = () => {
               return (
                 <Card 
                   key={project.id}
-                  className={`group overflow-hidden hover:shadow-xl transition-all duration-500 border-0 hover:scale-[1.02] ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                  style={{ transitionDelay: `${index * 200}ms` }}
+                  className={`group relative overflow-hidden hover:shadow-2xl transition-all duration-500 border-0 hover:scale-[1.02] bg-card/95 backdrop-blur-sm ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                  style={{ 
+                    transitionDelay: `${index * 200}ms`,
+                    zIndex: 10
+                  }}
                 >
                   <CardHeader className={`bg-gradient-to-br ${project.color} text-white relative p-6`}>
                     <div className="absolute inset-0 bg-black/10"></div>
@@ -63,7 +70,7 @@ const Projects = () => {
                       </CardDescription>
                     </div>
                   </CardHeader>
-                  <CardContent className="p-6">
+                  <CardContent className="p-6 bg-card">
                     <div className="space-y-4">
                       <div>
                         <h4 className="font-semibold text-sm mb-3 text-muted-foreground uppercase tracking-wide">
