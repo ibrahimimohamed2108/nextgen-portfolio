@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from 'react';
 import { useInView } from '@/hooks/useInView';
 
@@ -136,10 +135,10 @@ const Gallery3D = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
+        {/* Section Header - Updated Title */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-blue-600 to-primary bg-clip-text text-transparent">
-            Interactive 3D Gallery
+            Gallery
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
             Explore my technical expertise through this interactive 3D showcase. 
