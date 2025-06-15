@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Scene3D } from './3d/Scene3D';
@@ -10,14 +11,18 @@ import Education from './Education';
 import Skills from './Skills';
 import Contact from './Contact';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Eye, Layers3, MousePointer2, Sparkles } from 'lucide-react';
+import { Eye, Layers3, MousePointer2, Sparkles, AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 export const Portfolio3D = () => {
   const [view3D, setView3D] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
   const [showStory, setShowStory] = useState(false);
   const [webglError, setWebglError] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(true);
   const { t } = useLanguage();
+  const { toast } = useToast();
 
   const sections = ['hero', 'experience', 'education', 'skills', 'contact'];
 
@@ -36,16 +41,72 @@ export const Portfolio3D = () => {
   }, [view3D]);
 
   const handleWebGLError = () => {
+    console.log('WebGL Error detected, falling back to 2D');
     setWebglError(true);
     setView3D(false);
+    
+    toast({
+      title: "3D Mode Unavailable",
+      description: "Your browser doesn't support WebGL. Switched to 2D mode.",
+      variant: "destructive",
+    });
   };
 
   const handle3DToggle = () => {
     if (webglError) {
-      // Show a toast or alert that 3D is not available
+      toast({
+        title: "3D Not Available",
+        description: "WebGL is not supported on your device or browser.",
+        variant: "destructive",
+      });
       return;
     }
-    setView3D(!view3D);
+    
+    const newView3D = !view3D;
+    setView3D(newView3D);
+    
+    if (newView3D) {
+      setShowInstructions(true);
+      toast({
+        title: "3D Mode Activated",
+        description: "Use your mouse to navigate the 3D space!",
+      });
+      
+      // Hide instructions after 5 seconds
+      setTimeout(() => setShowInstructions(false), 5000);
+    } else {
+      toast({
+        title: "2D Mode Activated",
+        description: "Switched back to traditional scrolling navigation.",
+      });
+    }
+  };
+
+  const getSectionContent = (sectionIndex: number) => {
+    const sectionData = {
+      0: {
+        title: t('nav.about') || 'About',
+        description: t('hero.description') || 'Passionate engineering student focused on innovation and technology.'
+      },
+      1: {
+        title: t('nav.experience') || 'Experience', 
+        description: t('experience.description') || 'Professional experience in software development and project management.'
+      },
+      2: {
+        title: t('nav.education') || 'Education',
+        description: t('education.title') || 'Academic journey and continuous learning path.'
+      },
+      3: {
+        title: t('nav.skills') || 'Skills',
+        description: t('skills.description') || 'Technical expertise and professional competencies.'
+      },
+      4: {
+        title: t('nav.contact') || 'Contact',
+        description: t('contact.description') || 'Get in touch for collaborations and opportunities.'
+      }
+    };
+    
+    return sectionData[sectionIndex as keyof typeof sectionData] || sectionData[0];
   };
 
   return (
@@ -60,15 +121,15 @@ export const Portfolio3D = () => {
           disabled={webglError}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg backdrop-blur-md border transition-all ${
             view3D 
-              ? 'bg-primary text-primary-foreground border-primary' 
+              ? 'bg-primary text-primary-foreground border-primary shadow-lg' 
               : webglError
-              ? 'bg-muted text-muted-foreground border-muted cursor-not-allowed'
-              : 'bg-background/80 border-border hover:bg-primary/10'
+              ? 'bg-muted text-muted-foreground border-muted cursor-not-allowed opacity-50'
+              : 'bg-background/80 border-border hover:bg-primary/10 hover:border-primary/50'
           }`}
           whileHover={webglError ? {} : { scale: 1.05 }}
           whileTap={webglError ? {} : { scale: 0.95 }}
         >
-          <Layers3 className="h-4 w-4" />
+          {webglError ? <AlertCircle className="h-4 w-4" /> : <Layers3 className="h-4 w-4" />}
           <span className="text-sm font-medium">
             {webglError 
               ? (t('3d.unavailable') || '3D Unavailable')
@@ -83,8 +144,8 @@ export const Portfolio3D = () => {
           onClick={() => setShowStory(!showStory)}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg backdrop-blur-md border transition-all ${
             showStory 
-              ? 'bg-purple-600 text-white border-purple-600' 
-              : 'bg-background/80 border-border hover:bg-purple-600/10'
+              ? 'bg-purple-600 text-white border-purple-600 shadow-lg' 
+              : 'bg-background/80 border-border hover:bg-purple-600/10 hover:border-purple-600/50'
           }`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -98,20 +159,31 @@ export const Portfolio3D = () => {
 
       {/* 3D Instructions */}
       <AnimatePresence>
-        {view3D && (
+        {view3D && showInstructions && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-32 left-4 z-50 bg-background/90 backdrop-blur-md rounded-lg p-4 border max-w-xs"
+            className="fixed top-32 left-4 z-50 bg-background/95 backdrop-blur-md rounded-lg p-4 border max-w-xs shadow-lg"
           >
-            <div className="flex items-center gap-2 mb-2">
-              <MousePointer2 className="h-4 w-4 text-primary" />
-              <span className="font-medium text-sm">{t('3d.controls') || 'Controls'}</span>
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <MousePointer2 className="h-4 w-4 text-primary" />
+                <span className="font-medium text-sm">{t('3d.controls') || 'Controls'}</span>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowInstructions(false)}
+                className="h-6 w-6 p-0"
+              >
+                ×
+              </Button>
             </div>
             <ul className="text-xs text-muted-foreground space-y-1">
               <li>• {t('3d.click') || 'Click sections to navigate'}</li>
               <li>• {t('3d.drag') || 'Drag to rotate view'}</li>
+              <li>• {t('3d.scroll') || 'Scroll to zoom in/out'}</li>
               <li>• {t('3d.terminal') || 'Use terminal for interactions'}</li>
             </ul>
           </motion.div>
@@ -149,25 +221,30 @@ export const Portfolio3D = () => {
             <div className="absolute inset-0 pointer-events-none z-10">
               <div className="container mx-auto px-4 h-full flex items-center">
                 <motion.div
-                  className="max-w-md bg-background/90 backdrop-blur-md rounded-xl p-6 border pointer-events-auto"
+                  className="max-w-md bg-background/95 backdrop-blur-md rounded-xl p-6 border pointer-events-auto shadow-xl"
                   initial={{ x: -100, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: 0.5 }}
+                  key={currentSection}
                 >
                   <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                    {sections[currentSection] === 'hero' && (t('nav.about') || 'About')}
-                    {sections[currentSection] === 'experience' && (t('nav.experience') || 'Experience')}
-                    {sections[currentSection] === 'education' && (t('nav.education') || 'Education')}
-                    {sections[currentSection] === 'skills' && (t('nav.skills') || 'Skills')}
-                    {sections[currentSection] === 'contact' && (t('nav.contact') || 'Contact')}
+                    {getSectionContent(currentSection).title}
                   </h2>
-                  <p className="text-muted-foreground">
-                    {sections[currentSection] === 'hero' && (t('hero.description') || 'Passionate engineering student focused on innovation and technology.')}
-                    {sections[currentSection] === 'experience' && (t('experience.description') || 'Professional experience in software development and project management.')}
-                    {sections[currentSection] === 'education' && (t('education.title') || 'Academic journey and continuous learning path.')}
-                    {sections[currentSection] === 'skills' && (t('skills.description') || 'Technical expertise and professional competencies.')}
-                    {sections[currentSection] === 'contact' && (t('contact.description') || 'Get in touch for collaborations and opportunities.')}
+                  <p className="text-muted-foreground leading-relaxed">
+                    {getSectionContent(currentSection).description}
                   </p>
+                  
+                  {/* Section indicator */}
+                  <div className="flex gap-2 mt-4">
+                    {sections.map((_, index) => (
+                      <div
+                        key={index}
+                        className={`h-2 w-8 rounded-full transition-all ${
+                          index === currentSection ? 'bg-primary' : 'bg-muted'
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </motion.div>
               </div>
             </div>
@@ -197,7 +274,7 @@ export const Portfolio3D = () => {
       {/* View Mode Indicator */}
       <div className="fixed bottom-4 left-4 z-50">
         <motion.div
-          className="flex items-center gap-2 px-3 py-2 bg-background/90 backdrop-blur-md rounded-full border text-sm"
+          className="flex items-center gap-2 px-3 py-2 bg-background/95 backdrop-blur-md rounded-full border text-sm shadow-lg"
           animate={{ 
             scale: [1, 1.05, 1],
             boxShadow: view3D || showStory 

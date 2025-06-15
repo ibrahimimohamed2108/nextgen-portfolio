@@ -1,3 +1,4 @@
+
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Text, Float, Environment, PerspectiveCamera } from '@react-three/drei';
 import { useRef, useState, useEffect, Suspense } from 'react';
@@ -17,20 +18,23 @@ interface Scene3DProps {
 const CameraController = ({ currentSection }: { currentSection: number }) => {
   const { camera } = useThree();
   const targetPosition = useRef(new Vector3());
+  const targetLookAt = useRef(new Vector3());
   
   const positions = [
-    new Vector3(0, 0, 10), // Hero
-    new Vector3(-8, 2, 6), // Experience
-    new Vector3(8, -2, 6), // Education
-    new Vector3(0, 8, 4), // Skills
-    new Vector3(0, -8, 4), // Contact
+    { pos: new Vector3(0, 0, 10), lookAt: new Vector3(0, 0, 0) }, // Hero
+    { pos: new Vector3(-8, 2, 6), lookAt: new Vector3(-8, 2, 0) }, // Experience
+    { pos: new Vector3(8, -2, 6), lookAt: new Vector3(8, -2, 0) }, // Education
+    { pos: new Vector3(0, 8, 4), lookAt: new Vector3(0, 6, 0) }, // Skills
+    { pos: new Vector3(0, -8, 4), lookAt: new Vector3(0, -6, 0) }, // Contact
   ];
 
   useFrame(() => {
     const target = positions[currentSection] || positions[0];
-    targetPosition.current.lerp(target, 0.02);
+    targetPosition.current.lerp(target.pos, 0.05);
+    targetLookAt.current.lerp(target.lookAt, 0.05);
+    
     camera.position.copy(targetPosition.current);
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(targetLookAt.current);
   });
 
   return null;
@@ -39,31 +43,44 @@ const CameraController = ({ currentSection }: { currentSection: number }) => {
 const FloatingSection = ({ 
   position, 
   children, 
-  isActive 
+  isActive,
+  onClick 
 }: { 
   position: [number, number, number]; 
   children: React.ReactNode;
   isActive: boolean;
+  onClick: () => void;
 }) => {
   const meshRef = useRef<THREE.Group>(null);
   const { theme } = useTheme();
+  const [hovered, setHovered] = useState(false);
 
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.y += 0.005;
       meshRef.current.position.y += Math.sin(state.clock.elapsedTime * 0.5) * 0.01;
+      
+      // Scale effect for active/hovered sections
+      const targetScale = isActive ? 1.1 : hovered ? 1.05 : 1;
+      meshRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
     }
   });
 
   return (
     <Float speed={2} rotationIntensity={0.1} floatIntensity={0.5}>
-      <group ref={meshRef} position={position}>
+      <group 
+        ref={meshRef} 
+        position={position}
+        onClick={onClick}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+      >
         <mesh>
           <boxGeometry args={[4, 3, 0.2]} />
           <meshStandardMaterial 
             color={isActive ? (theme === 'dark' ? '#3b82f6' : '#1e40af') : (theme === 'dark' ? '#1f2937' : '#f3f4f6')}
             transparent
-            opacity={0.8}
+            opacity={isActive ? 0.9 : hovered ? 0.7 : 0.6}
             roughness={0.1}
             metalness={0.2}
           />
@@ -146,6 +163,17 @@ const ParticleField = () => {
   );
 };
 
+const LoadingSpinner = () => {
+  return (
+    <div className="fixed inset-0 z-0 flex items-center justify-center bg-background">
+      <div className="flex flex-col items-center gap-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <p className="text-muted-foreground">Loading 3D Scene...</p>
+      </div>
+    </div>
+  );
+};
+
 export const Scene3D: React.FC<Scene3DProps> = ({ currentSection, onSectionChange, onWebGLError }) => {
   const { t } = useLanguage();
   const { theme } = useTheme();
@@ -155,6 +183,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({ currentSection, onSectionChang
   useEffect(() => {
     const checkWebGL = () => {
       const supported = isWebGLAvailable();
+      console.log('WebGL Support Check:', supported);
       setWebglSupported(supported);
       
       if (!supported && onWebGLError) {
@@ -165,8 +194,8 @@ export const Scene3D: React.FC<Scene3DProps> = ({ currentSection, onSectionChang
     checkWebGL();
   }, [onWebGLError]);
 
-  const handleCanvasError = () => {
-    console.error('Canvas creation failed, falling back to 2D');
+  const handleCanvasError = (error: any) => {
+    console.error('Canvas creation failed:', error);
     setRenderError(true);
     if (onWebGLError) {
       onWebGLError();
@@ -175,11 +204,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({ currentSection, onSectionChang
 
   // Show loading while checking WebGL support
   if (webglSupported === null) {
-    return (
-      <div className="fixed inset-0 z-0 flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   // Show error fallback if WebGL is not supported or canvas creation failed
@@ -192,20 +217,28 @@ export const Scene3D: React.FC<Scene3DProps> = ({ currentSection, onSectionChang
   }
 
   const sections = [
-    { key: 'hero', title: t('nav.about'), position: [0, 0, 0] as [number, number, number] },
-    { key: 'experience', title: t('nav.experience'), position: [-8, 2, 0] as [number, number, number] },
-    { key: 'education', title: t('nav.education'), position: [8, -2, 0] as [number, number, number] },
-    { key: 'skills', title: t('nav.skills'), position: [0, 6, 0] as [number, number, number] },
-    { key: 'contact', title: t('nav.contact'), position: [0, -6, 0] as [number, number, number] },
+    { key: 'hero', title: t('nav.about') || 'About', position: [0, 0, 0] as [number, number, number] },
+    { key: 'experience', title: t('nav.experience') || 'Experience', position: [-8, 2, 0] as [number, number, number] },
+    { key: 'education', title: t('nav.education') || 'Education', position: [8, -2, 0] as [number, number, number] },
+    { key: 'skills', title: t('nav.skills') || 'Skills', position: [0, 6, 0] as [number, number, number] },
+    { key: 'contact', title: t('nav.contact') || 'Contact', position: [0, -6, 0] as [number, number, number] },
   ];
 
   return (
     <div className="fixed inset-0 z-0">
       <Canvas
+        gl={{ 
+          antialias: true, 
+          alpha: true,
+          powerPreference: "high-performance",
+          failIfMajorPerformanceCaveat: false
+        }}
+        camera={{ position: [0, 0, 10], fov: 75 }}
         onCreated={(state) => {
+          console.log('Canvas created successfully');
           // Additional check when canvas is created
           if (!state.gl.getContext()) {
-            handleCanvasError();
+            handleCanvasError('No WebGL context available');
           }
         }}
         onError={handleCanvasError}
@@ -214,7 +247,15 @@ export const Scene3D: React.FC<Scene3DProps> = ({ currentSection, onSectionChang
         <Suspense fallback={null}>
           <Environment preset="city" />
           <PerspectiveCamera makeDefault position={[0, 0, 10]} />
-          <OrbitControls enablePan={false} enableZoom={false} enableRotate={true} />
+          <OrbitControls 
+            enablePan={false} 
+            enableZoom={true} 
+            enableRotate={true}
+            maxDistance={15}
+            minDistance={3}
+            autoRotate={false}
+            autoRotateSpeed={0.5}
+          />
           
           <ambientLight intensity={0.5} />
           <directionalLight position={[10, 10, 5]} intensity={1} />
@@ -227,6 +268,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({ currentSection, onSectionChang
               key={section.key}
               position={section.position}
               isActive={currentSection === index}
+              onClick={() => onSectionChange(index)}
             >
               <InteractiveText
                 text={section.title}
