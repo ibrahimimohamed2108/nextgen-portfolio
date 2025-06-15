@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Download, Mail, Github, Linkedin, ChevronDown } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
@@ -128,6 +129,18 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
     URL.revokeObjectURL(url);
   };
 
+  const openGitHub = () => {
+    window.open('https://github.com/ibrahimimohamed2108', '_blank');
+  };
+
+  const openLinkedIn = () => {
+    window.open('https://www.linkedin.com/in/ibrahimimohamed', '_blank');
+  };
+
+  const openEmail = () => {
+    window.location.href = 'mailto:ibrahimimoahamed2108@gmail.com';
+  };
+
   return (
     <section id="about" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-background via-background to-primary/5" ref={ref}>
       {/* Particle Background */}
@@ -221,7 +234,7 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
                   size="icon" 
                   variant="ghost" 
                   className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
-                  onClick={() => window.open('https://github.com/ibrahimimohamed2108', '_blank')}
+                  onClick={openGitHub}
                 >
                   <Github className="h-5 w-5" />
                 </Button>
@@ -229,7 +242,7 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
                   size="icon" 
                   variant="ghost" 
                   className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
-                  onClick={() => window.open('https://www.linkedin.com/in/ibrahimimohamed', '_blank')}
+                  onClick={openLinkedIn}
                 >
                   <Linkedin className="h-5 w-5" />
                 </Button>
@@ -237,7 +250,7 @@ Actively seeking a **2-month internship (PFA)** for **July–August 2025** to ap
                   size="icon" 
                   variant="ghost" 
                   className="hover:bg-primary/10 hover:scale-110 transition-all duration-300"
-                  onClick={() => scrollToSection('contact')}
+                  onClick={openEmail}
                 >
                   <Mail className="h-5 w-5" />
                 </Button>
