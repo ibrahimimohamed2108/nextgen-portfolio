@@ -1,4 +1,3 @@
-
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Text, Float, Environment, PerspectiveCamera, Stars, Cloud, Sparkles } from '@react-three/drei';
 import { useRef, useState, useEffect, Suspense } from 'react';
@@ -353,22 +352,16 @@ export const Scene3D: React.FC<Scene3DProps> = ({ currentSection, onSectionChang
           <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
           <EnhancedParticleField />
           
-          {/* Floating clouds for atmosphere */}
+          {/* Floating clouds for atmosphere - Fixed props */}
           <Cloud
             position={[-20, 10, -20]}
             speed={0.2}
             opacity={0.3}
-            width={10}
-            depth={1.5}
-            segments={20}
           />
           <Cloud
             position={[20, -10, -20]}
             speed={0.3}
             opacity={0.2}
-            width={8}
-            depth={1.5}
-            segments={15}
           />
           
           {/* Interactive Sections */}
