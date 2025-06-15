@@ -6,9 +6,13 @@ interface UseInViewOptions {
   rootMargin?: string;
 }
 
-export const useInView = (options: UseInViewOptions = {}) => {
+export const useInView = (
+  target?: React.RefObject<HTMLElement>,
+  options: UseInViewOptions = {}
+) => {
   const [isInView, setIsInView] = useState(false);
   const ref = useRef<HTMLElement>(null);
+  const elementRef = target || ref;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -21,16 +25,16 @@ export const useInView = (options: UseInViewOptions = {}) => {
       }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (elementRef.current) {
+        observer.unobserve(elementRef.current);
       }
     };
-  }, [options.threshold, options.rootMargin]);
+  }, [options.threshold, options.rootMargin, elementRef]);
 
-  return { ref, isInView };
+  return target ? isInView : { ref, isInView };
 };
