@@ -1,8 +1,8 @@
 
 import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { techData } from '@/data/techStackData';
-import { createPlanetAnimations, createEntranceAnimations } from '@/utils/solarSystemAnimations';
 import BackgroundStars from './solarSystem/BackgroundStars';
 import CentralSun from './solarSystem/CentralSun';
 import TechPlanet from './solarSystem/TechPlanet';
@@ -30,12 +30,21 @@ const TechSolarSystem = () => {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!isVisible || !containerRef.current) return;
-
-    createPlanetAnimations(techData);
-    createEntranceAnimations();
-  }, [isVisible]);
+  const solarSystemVariants = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        damping: 15,
+        stiffness: 100,
+        delay: 0.5,
+        staggerChildren: 0.2,
+        delayChildren: 1
+      }
+    }
+  };
 
   return (
     <section
@@ -59,9 +68,12 @@ const TechSolarSystem = () => {
 
         {/* Solar System Container */}
         <div className="relative w-full max-w-6xl mx-auto">
-          <div 
+          <motion.div 
             className="solar-system relative mx-auto"
             style={{ width: '1200px', height: '1200px' }}
+            variants={solarSystemVariants}
+            initial="hidden"
+            animate={isVisible ? "visible" : "hidden"}
           >
             <CentralSun />
 
@@ -73,7 +85,7 @@ const TechSolarSystem = () => {
                 planetIndex={planetIndex}
               />
             ))}
-          </div>
+          </motion.div>
         </div>
 
         <TechLegend techData={techData} />

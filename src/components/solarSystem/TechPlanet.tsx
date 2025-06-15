@@ -1,4 +1,5 @@
 
+import { motion } from 'framer-motion';
 import { TechCategory } from '@/types/techStack';
 import TechMoon from './TechMoon';
 
@@ -9,6 +10,19 @@ interface TechPlanetProps {
 
 const TechPlanet = ({ category, planetIndex }: TechPlanetProps) => {
   const Icon = category.icon;
+
+  const planetVariants = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        damping: 10,
+        stiffness: 100
+      }
+    }
+  };
 
   return (
     <div key={category.name} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -25,7 +39,7 @@ const TechPlanet = ({ category, planetIndex }: TechPlanetProps) => {
       />
       
       {/* Planet orbit container */}
-      <div 
+      <motion.div 
         className={`planet planet-${planetIndex} absolute`}
         style={{
           width: category.orbitRadius * 2,
@@ -34,17 +48,26 @@ const TechPlanet = ({ category, planetIndex }: TechPlanetProps) => {
           left: '50%',
           transform: 'translate(-50%, -50%)'
         }}
+        animate={{ rotate: 360 }}
+        transition={{
+          duration: 15 + (planetIndex * 3),
+          repeat: Infinity,
+          ease: "linear",
+          delay: planetIndex * 0.5
+        }}
       >
         {/* Planet */}
-        <div 
+        <motion.div 
           className="planet-container absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
           style={{
             width: category.size,
             height: category.size
           }}
+          variants={planetVariants}
+          whileHover={{ scale: 1.1 }}
         >
           <div 
-            className="w-full h-full rounded-full shadow-lg flex items-center justify-center text-white font-semibold text-xs transition-transform hover:scale-110"
+            className="w-full h-full rounded-full shadow-lg flex items-center justify-center text-white font-semibold text-xs transition-transform"
             style={{ backgroundColor: category.color }}
           >
             <Icon size={category.size * 0.4} />
@@ -65,8 +88,8 @@ const TechPlanet = ({ category, planetIndex }: TechPlanetProps) => {
               planetSize={category.size}
             />
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
