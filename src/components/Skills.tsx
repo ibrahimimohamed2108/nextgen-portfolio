@@ -1,7 +1,7 @@
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Award, Code, Database, Cloud, Star, Building2, GraduationCap } from "lucide-react";
+import { Award, Code, Database, Cloud, Star, Building2, GraduationCap, Brain } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -77,6 +77,7 @@ const Skills = () => {
     { category: "Backend", icon: Code, skills: ["Java", "Spring Framework", "PHP"], color: "from-green-500 to-emerald-600" },
     { category: "Database", icon: Database, skills: ["MongoDB", "MySQL"], color: "from-blue-500 to-cyan-600" },
     { category: "Cloud & DevOps", icon: Cloud, skills: ["AWS", "Docker", "Kubernetes", "Jenkins", "Terraform"], color: "from-purple-500 to-violet-600" },
+    { category: "AI & Prompt Engineering", icon: Brain, skills: ["Prompt Engineering", "AI Integration", "LLM Optimization"], color: "from-pink-500 to-purple-600" },
     { category: "Other", icon: Award, skills: ["Computer Networking", "LDAP", "Active Directory", "Apache2"], color: "from-orange-500 to-red-600" }
   ];
 

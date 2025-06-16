@@ -42,6 +42,11 @@ export const translations = {
       technologies: 'Technologies Used',
       viewProject: 'View Details',
       sourceCode: 'Source Code',
+      'prompt-engineering': {
+        title: 'NextGen AI-Powered Portfolio',
+        description: 'A sophisticated portfolio showcasing advanced prompt engineering techniques',
+        details: 'This portfolio itself represents a masterclass in prompt engineering, where extensive AI collaboration was used to architect, enhance, and optimize every aspect of the application. From advanced React patterns to Docker containerization, this project demonstrates how effective prompt engineering can guide complex software development workflows and create beautiful, functional applications.'
+      },
       cicd: {
         title: 'Automated CI/CD Pipeline on AWS',
         description: 'Automated a CI/CD pipeline on AWS using Jenkins, Kubernetes, and Terraform',
@@ -160,6 +165,11 @@ export const translations = {
       technologies: 'Technologies Utilisées',
       viewProject: 'Voir Détails',
       sourceCode: 'Code Source',
+      'prompt-engineering': {
+        title: 'Portfolio NextGen Alimenté par IA',
+        description: 'Un portfolio sophistiqué démontrant des techniques avancées d\'ingénierie de prompts',
+        details: 'Ce portfolio représente en lui-même une masterclass en ingénierie de prompts, où une collaboration IA extensive a été utilisée pour architecturer, améliorer et optimiser chaque aspect de l\'application. Des patterns React avancés à la conteneurisation Docker, ce projet démontre comment une ingénierie de prompts efficace peut guider des workflows de développement logiciel complexes et créer des applications belles et fonctionnelles.'
+      },
       cicd: {
         title: 'Pipeline CI/CD Automatisé sur AWS',
         description: 'Automatisation d\'un pipeline CI/CD sur AWS avec Jenkins, Kubernetes et Terraform',

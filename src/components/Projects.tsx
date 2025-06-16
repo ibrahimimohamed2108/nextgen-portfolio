@@ -1,7 +1,7 @@
 
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Cloud, ShoppingCart, Utensils, ExternalLink, Github } from "lucide-react";
+import { Cloud, ShoppingCart, Utensils, ExternalLink, Github, Brain } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -10,6 +10,13 @@ const Projects = () => {
   const { t } = useLanguage();
 
   const projects = [
+    {
+      id: 'prompt-engineering',
+      icon: Brain,
+      color: 'from-pink-500 to-purple-600',
+      skills: ['Prompt Engineering', 'AI Integration', 'React', 'TypeScript', 'Docker'],
+      githubUrl: 'https://github.com/ibrahimimohamed2108/nextgen-portfolio'
+    },
     {
       id: 'cicd',
       icon: Cloud,
