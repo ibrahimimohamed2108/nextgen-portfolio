@@ -1,5 +1,3 @@
-Sure! Here’s a full detailed **README.md** documentation for your EC2 Docker + Nginx + TLS deployment with the optional `.sh` script included at the end.
-
 ---
 
 # Deployment Guide for NextGen Portfolio Website on EC2 with Docker and TLS
@@ -255,5 +253,3 @@ chmod +x deploy.sh
 * Open ports 80 and 443 in your EC2 security group.
 
 ---
-
-If you want me to generate the script or guide with additional features or troubleshooting tips, just ask!
