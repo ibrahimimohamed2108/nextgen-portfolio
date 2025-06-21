@@ -1,3 +1,4 @@
+
 ---
 
 # Deployment Guide for NextGen Portfolio Website on EC2 with Docker and TLS
@@ -129,6 +130,16 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
+
+    location /monitoring/ {
+        proxy_pass http://127.0.0.1:19999/;
+        proxy_http_version 1.1;
+        proxy_pass_request_headers on;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+    }
 }
 ```
 
@@ -159,6 +170,54 @@ https://ibrahimi.software
 ```
 
 You should see your portfolio website running securely with HTTPS.
+
+---
+
+## Step 8 (Optional) — Enable Live Monitoring via Netdata
+
+To access live system monitoring at `https://ibrahimi.software/monitoring`, follow these steps:
+
+### Install Netdata via Docker
+
+```bash
+sudo docker run -d --name netdata \
+  -p 127.0.0.1:19999:19999 \
+  --cap-add SYS_PTRACE \
+  --security-opt apparmor=unconfined \
+  -v netdataconfig:/etc/netdata \
+  -v netdatalib:/var/lib/netdata \
+  -v netdatacache:/var/cache/netdata \
+  -v /etc/passwd:/host/etc/passwd:ro \
+  -v /etc/group:/host/etc/group:ro \
+  -v /proc:/host/proc:ro \
+  -v /sys:/host/sys:ro \
+  -v /etc/os-release:/host/etc/os-release:ro \
+  netdata/netdata
+```
+
+Then go to:
+
+```
+https://ibrahimi.software/monitoring
+```
+
+You should see a full live dashboard.
+
+### (Optional) Secure with Password
+
+```bash
+sudo apt install apache2-utils
+sudo htpasswd -c /etc/nginx/.htpasswd admin
+```
+
+Add this inside the `/monitoring/` block in Nginx:
+
+```nginx
+auth_basic "Restricted";
+auth_basic_user_file /etc/nginx/.htpasswd;
+```
+
+---
 
 ---
 
