@@ -517,6 +517,134 @@ log "3. Set up monitoring password if desired"
 
 </details>
 
+
+---
+
+### Enable Security Hardening (CDN-Like Features Without Cloudflare)
+
+You can secure your site like a CDN/WAF proxy would, without relying on Cloudflare, by using built-in server-level protections on your EC2 instance.
+
+#### Features Covered
+
+* Reverse proxy caching (like a CDN)
+* Basic WAF via ModSecurity
+* Rate limiting and connection limiting
+* Fail2Ban IP banning for brute force attacks
+
+---
+
+#### 1. Enable Reverse Proxy Caching (Like CDN)
+
+Edit your Nginx config (`/etc/nginx/sites-available/default`) and **above the `server` block**, add:
+
+```nginx
+proxy_cache_path /tmp/nginx_cache levels=1:2 keys_zone=my_cache:10m max_size=100m inactive=60m use_temp_path=off;
+limit_req_zone $binary_remote_addr zone=req_limit_per_ip:10m rate=10r/s;
+limit_conn_zone $binary_remote_addr zone=conn_limit_per_ip:10m;
+```
+
+Then inside the `location /` block (not `/monitoring/`), update to:
+
+```nginx
+location / {
+    proxy_cache my_cache;
+    proxy_cache_valid 200 302 10m;
+    proxy_cache_valid 404 1m;
+    proxy_cache_use_stale error timeout updating;
+
+    proxy_pass http://localhost:3000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    limit_req zone=req_limit_per_ip burst=20 nodelay;
+    limit_conn zone=conn_limit_per_ip 10;
+}
+```
+
+Then reload Nginx:
+
+```bash
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+---
+
+#### 2. Enable Basic WAF (ModSecurity)
+
+```bash
+sudo apt install libnginx-mod-security
+sudo cp /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
+sudo nano /etc/modsecurity/modsecurity.conf
+```
+
+Set this line:
+
+```bash
+SecRuleEngine DetectionOnly
+```
+
+Then enable the module in your Nginx config:
+
+```nginx
+modsecurity on;
+modsecurity_rules_file /etc/modsecurity/modsecurity.conf;
+```
+
+Place this inside your main `server {}` block (outside the `location` blocks).
+
+Restart Nginx:
+
+```bash
+sudo systemctl restart nginx
+```
+
+You can later set `SecRuleEngine On` to start actively blocking.
+
+---
+
+#### 3. Enable Fail2Ban (Block Repeated Offenders)
+
+```bash
+sudo apt install fail2ban -y
+sudo systemctl enable --now fail2ban
+```
+
+Configure jail rules at:
+
+```bash
+sudo nano /etc/fail2ban/jail.local
+```
+
+Example:
+
+```ini
+[nginx-http-auth]
+enabled = true
+port = http,https
+filter = nginx-http-auth
+logpath = /var/log/nginx/error.log
+maxretry = 3
+```
+
+Restart Fail2Ban:
+
+```bash
+sudo systemctl restart fail2ban
+```
+
+---
+
+#### ⚠️ Important
+
+
+If any part causes an error (502/403), undo the recent change and restart Nginx to restore service.
+
+---
+
+Would you like me to regenerate your full `README.md` with this included in the right place?
+
 ---
 
 ## 🔍 Troubleshooting
